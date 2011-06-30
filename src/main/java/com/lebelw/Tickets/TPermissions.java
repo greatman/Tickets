@@ -1,7 +1,6 @@
 package com.lebelw.Tickets;
 
 import com.nijikokun.bukkit.Permissions.Permissions;
-import org.anjocaido.groupmanager.GroupManager;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
@@ -22,7 +21,6 @@ public class TPermissions {
     public static void initialize(Tickets instance) {
         TPermissions.plugin = instance;
         Plugin Permissions = plugin.getServer().getPluginManager().getPlugin("Permissions");
-        Plugin GroupManager = plugin.getServer().getPluginManager().getPlugin("GroupManager");
         handler = PermissionHandler.NONE;
 
         if (Permissions != null) {
@@ -30,11 +28,6 @@ public class TPermissions {
             handler = PermissionHandler.PERMISSIONS;
             String version = PermissionPlugin.getDescription().getVersion();
                 TLogger.info("Permissions version " + version + " loaded.");
-        } else if (GroupManager != null) {
-            PermissionPlugin = GroupManager;
-            handler = PermissionHandler.GROUP_MANAGER;
-            String version = PermissionPlugin.getDescription().getVersion();
-                TLogger.info("GroupManager version " + version + " loaded.");
         } else{
         	TLogger.info("No permissions system found!");
         }
@@ -63,8 +56,6 @@ public class TPermissions {
         switch (handler) {
             case PERMISSIONS:
                 return ((Permissions) PermissionPlugin).getHandler().has(player, permission);
-            case GROUP_MANAGER:
-                return ((GroupManager) PermissionPlugin).getWorldsHolder().getWorldPermissions(player).has(player, permission);
             case NONE:
                 return defaultPerm;
             default:
