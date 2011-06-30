@@ -30,7 +30,6 @@ public class TemplateCmd implements CommandExecutor {
         plugin = instance;
     }
 
-    @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         boolean handled = false;
         if (is(label, "ticket")) {
