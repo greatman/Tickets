@@ -16,6 +16,16 @@
 			</releases>
 			<url> http://repo.bukkit.org/artifactory/repo/</url>
 		</repository>
+		<repository>
+			<id>bukkit-repo</id>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<url> http://lebelw.com/repo/</url>
+		</repository>
 	</repositories>
 	<pluginRepositories>
 		<pluginRepository>
