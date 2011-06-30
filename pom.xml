@@ -5,6 +5,11 @@
   <version>0.1</version>
   <name>Tickets</name>
   <url>None</url>
+  <scm>
+    <connection>scm:git:git://github.com/greatman/Tickets.git</connection>
+    <url>https://github.com/greatman/Tickets</url>
+    <developerConnection>scm:git:git@github.com:greatman/Tickets.git</developerConnection>
+  </scm>
   <repositories>
 		<repository>
 			<id>bukkit-repo</id>
@@ -52,6 +57,21 @@
 			<scope>compile</scope>
 		</dependency>
   </dependencies>
+  
+  <build>
+    <sourceDirectory>${basedir}/src/main/java</sourceDirectory>
+     <resources>
+    <resource>
+        <targetPath>.</targetPath>
+        <filtering>true</filtering>
+        <directory>${basedir}/src/main/resources/</directory>
+        <includes>
+          <include>plugin.yml</include>
+        </includes>
+      </resource>
+      </resources>
+  
+     </build>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
