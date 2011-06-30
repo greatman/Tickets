@@ -17,7 +17,7 @@
 			<url> http://repo.bukkit.org/artifactory/repo/</url>
 		</repository>
 		<repository>
-			<id>bukkit-repo</id>
+			<id>lebelw-repo</id>
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
