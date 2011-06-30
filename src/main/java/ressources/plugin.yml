@@ -1,0 +1,7 @@
+name: Tickets
+main: com.lebelw.Tickets.Tickets
+version: 0.1
+commands:
+    ticket:
+        description: Take care of the tickets
+        usage: /ticket
