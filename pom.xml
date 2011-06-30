@@ -16,17 +16,6 @@
 			</releases>
 			<url> http://repo.bukkit.org/artifactory/repo/</url>
 		</repository>
-		<repository>
-			<id>nexisonline-repo</id>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<name>Nexis Entertainment M2 Repo</name>
-			<url>http://repo.nexisonline.net:8080/nexus/content/groups/public/</url>
-		</repository>
 	</repositories>
 	<pluginRepositories>
 		<pluginRepository>
