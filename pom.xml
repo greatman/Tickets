@@ -42,9 +42,6 @@
       <id>artifactory</id>
     </profile>
   </profiles>
-  <activeProfiles>
-    <activeProfile>artifactory</activeProfile>
-  </activeProfiles>
   
   <dependencies>
   <dependency>
