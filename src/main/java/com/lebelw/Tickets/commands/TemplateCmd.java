@@ -92,6 +92,7 @@ public class TemplateCmd implements CommandExecutor {
                 						amount = currentticket - ticketarg;
                 						if (amount < 0){
                 							sendMessage(sender,colorizeText("You online have ",ChatColor.RED) + currentticket + colorizeText(" ticket(s)! You can't send ",ChatColor.RED) + ticketarg + colorizeText(" ticket(s)!",ChatColor.RED));
+                							return handled;
                 						}
                 						if (givePlayerTicket(name,ticketarg)){
                 							dbm.update("UPDATE players SET ticket=" + amount + " WHERE name = '" + name + "'");
@@ -187,6 +188,7 @@ public class TemplateCmd implements CommandExecutor {
                     					amount = currentticket - ticketarg;
                     					if (amount < 0){
                     						sendMessage(sender,colorizeText("You can't remove ",ChatColor.RED) + ticketarg + colorizeText(" ticket(s)! This player only have ",ChatColor.RED) + currentticket + colorizeText(" ticket(s)!",ChatColor.RED));
+                    						return handled;
                     					}
                     					dbm.update("UPDATE players SET ticket=" + amount + " WHERE name = '" + name + "'");
                     		    	}else{
