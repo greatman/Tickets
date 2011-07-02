@@ -59,12 +59,12 @@
   </dependencies>
   
   <build>
-    <sourceDirectory>src/main/java</sourceDirectory>
+    <sourceDirectory>${basedir}/src/main/java</sourceDirectory>
      <resources>
      	<resource>
         	<targetPath>.</targetPath>
         	<filtering>true</filtering>
-        	<directory>src/main/resources/</directory>
+        	<directory>${basedir}/src/main/ressources/</directory>
         	<includes>
           		<include>plugin.yml</include>
         	</includes>
