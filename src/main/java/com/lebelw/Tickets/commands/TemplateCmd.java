@@ -86,6 +86,10 @@ public class TemplateCmd implements CommandExecutor {
                 					sendMessage(sender,colorizeText(error.getMessage(),ChatColor.RED));
                 					return handled;
                 				}
+                				if (sendername == name){
+                					sendMessage(sender,colorizeText("You can't send ticket(s) to yourself!",ChatColor.RED));
+                					return handled;
+                				}
                 				ticketarg = Integer.parseInt(args[2]);
                 				if (checkIfPlayerExists(sendername)){
                 			    		currentticket = getPlayerTicket(sendername);
