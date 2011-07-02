@@ -69,7 +69,7 @@ public class TemplateCmd implements CommandExecutor {
         		else if (is(args[0],"send")){
         			handled = true;
         			if (isPlayer(sender) && TPermissions.permission(getPlayer(sender), "ticket.send", getPlayer(sender).isOp())){
-        				if (args[1].isEmpty()){
+        				if (args.length == 1){
         					sendMessage(sender,colorizeText("/ticket send <Name> <Amount>",ChatColor.YELLOW) +" - Send ticket to semeone");
         					return handled;
         				}
