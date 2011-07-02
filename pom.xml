@@ -1,16 +1,18 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>com.lebelw</groupId>
-  <artifactId>Tickets</artifactId>
-  <version>0.1-SNAPSHOT</version>
-  <name>Tickets</name>
-  <url>None</url>
-  <scm>
-    <connection>scm:git:git://github.com/greatman/Tickets.git</connection>
-    <url>https://github.com/greatman/Tickets</url>
-    <developerConnection>scm:git:git@github.com:greatman/Tickets.git</developerConnection>
-  </scm>
-  <repositories>
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.lebelw</groupId>
+	<artifactId>Tickets</artifactId>
+	<version>0.1-SNAPSHOT</version>
+	<name>Tickets</name>
+	<url>None</url>
+	<scm>
+		<connection>scm:git:git://github.com/greatman/Tickets.git</connection>
+		<url>https://github.com/greatman/Tickets</url>
+		<developerConnection>scm:git:git@github.com:greatman/Tickets.git</developerConnection>
+	</scm>
+	<repositories>
 		<repository>
 			<id>bukkit-repo</id>
 			<snapshots>
@@ -38,10 +40,11 @@
 			<url>http://repo.bukkit.org/artifactory/plugins-release</url>
 		</pluginRepository>
 	</pluginRepositories>
-  
-  <dependencies>
-  <!-- You don't necessarily need to depend on Permissions if you don't want to, but this is how you add a dependency -->
-    <dependency>
+
+	<dependencies>
+		<!-- You don't necessarily need to depend on Permissions if you don't want 
+			to, but this is how you add a dependency -->
+		<dependency>
 			<!-- Grabs from Bukkit Artifactory -->
 			<groupId>org.bukkit</groupId>
 			<artifactId>bukkit</artifactId>
@@ -49,77 +52,84 @@
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
-	<dependency>
+		<dependency>
 			<groupId>com.nijikokun.bukkit</groupId>
 			<artifactId>Permissions</artifactId>
 			<version>2.7.4</version>
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
-  </dependencies>
-  
-  <build>
-    <sourceDirectory>${basedir}/src/main/java</sourceDirectory>
-     <resources>
-     	<resource>
-        	<targetPath>.</targetPath>
-        	<filtering>true</filtering>
-        	<directory>${basedir}/src/main/ressources/</directory>
-        	<includes>
-          		<include>plugin.yml</include>
-        	</includes>
-     	</resource>
-      </resources>
-  
-     
-     <!-- Plugins -->
-    <plugins>
-      <!-- Compile plugin -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>2.3.2</version>
-      </plugin>
+	</dependencies>
 
-      <!-- JAR creation plugin -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jar-plugin</artifactId>
-        <version>2.3.1</version>
-        <configuration>
-          <archive>
-            <addMavenDescriptor>true</addMavenDescriptor>
-            <pomPropertiesFile>true</pomPropertiesFile>
-            <manifest>
-              <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
-              <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-            </manifest>
-          </archive>
-        </configuration>
-      </plugin>
+	<build>
+		<sourceDirectory>${basedir}/src/main/java</sourceDirectory>
+		<resources>
+			<resource>
+				<targetPath>.</targetPath>
+				<filtering>true</filtering>
+				<directory>${basedir}/src/main/ressources/</directory>
+				<includes>
+					<include>plugin.yml</include>
+				</includes>
+			</resource>
+		</resources>
 
-      <!-- Assembly -->
-      <plugin>
-        <artifactId>maven-assembly-plugin</artifactId>
-        <version>2.2-beta-2</version>
-        <configuration>
-          <descriptor>${basedir}/src/main/assembly/default.xml</descriptor>
-        </configuration>
-      </plugin>
 
-      <!-- Release -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-release-plugin</artifactId>
-        <version>2.1</version>
-        <configuration>
-          <preparationGoals>assembly:assembly</preparationGoals>
-          <goals>assembly:assembly</goals>
-        </configuration>
-      </plugin>
-    </plugins>
-     </build>
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
+		<!-- Plugins -->
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+					<sourceEncoding>UTF-8</sourceEncoding>
+					<source>1.6</source>
+					<target>1.6</target>
+					<encoding>UTF-8</encoding>
+					<showDeprecation>true</showDeprecation>
+					<showWarnings>true</showWarnings>
+					<optimize>true</optimize>
+				</configuration>
+			</plugin>
+			<!-- JAR creation plugin -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.3.1</version>
+				<configuration>
+					<archive>
+						<addMavenDescriptor>true</addMavenDescriptor>
+						<pomPropertiesFile>true</pomPropertiesFile>
+						<manifest>
+							<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+
+			<!-- Assembly -->
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>2.2-beta-2</version>
+				<configuration>
+					<descriptor>${basedir}/src/main/assembly/default.xml</descriptor>
+				</configuration>
+			</plugin>
+
+			<!-- Release -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>2.1</version>
+				<configuration>
+					<preparationGoals>assembly:assembly</preparationGoals>
+					<goals>assembly:assembly</goals>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
 </project>
