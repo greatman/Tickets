@@ -22,11 +22,13 @@ import com.lebelw.Tickets.extras.CommandManager;
 
 public class Tickets extends JavaPlugin {
 	private int debug = 0;
-	public static String name = "Tickets";
-	public static String version = "0.1";
+	public static String name;
+    public static String version;
 	private final TPluginListener pluginListener = new TPluginListener(this);
 	private final CommandManager commandManager = new CommandManager(this);
 	public void onEnable() {
+		name = this.getDescription().getName();
+		version = this.getDescription().getVersion();
 		PluginManager pm = getServer().getPluginManager();
         // Makes sure all plugins are correctly loaded.
         pm.registerEvent(Event.Type.PLUGIN_ENABLE, pluginListener, Priority.Monitor, this);
