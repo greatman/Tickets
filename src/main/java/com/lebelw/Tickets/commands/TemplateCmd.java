@@ -201,6 +201,10 @@ public class TemplateCmd implements CommandExecutor {
                     						return handled;
                     					}
                     					dbm.update("UPDATE players SET ticket=" + amount + " WHERE name = '" + name + "'");
+                    					sendMessage(sender,colorizeText(args[2] +" ticket(s) has been removed from "+ name,ChatColor.GREEN));
+	                					if (target.getName() != null){
+	                						sendMessage(target,colorizeText(ticketarg +" ticket(s) has been removed by "+ ((Player)sender).getName() + ".",ChatColor.RED));
+	                					}
                     		    	}else{
                     		    		sendMessage(sender,colorizeText("You can't remove tickets to " + name + " because he doesn't have any!",ChatColor.RED));
                     		    		
