@@ -60,14 +60,29 @@ public class TemplateCmd implements CommandExecutor {
                             + " version " + colorizeText(Tickets.version, ChatColor.GREEN) + ".");
             		sendMessage(sender, "Commands:");
             		if (isPlayer(sender) && TPermissions.permission(getPlayer(sender), "ticket.give", getPlayer(sender).isOp())){
-            			sendMessage(sender,colorizeText("/ticket give",ChatColor.YELLOW) +" - Give ticket to semeone");
+            			sendMessage(sender,colorizeText("/ticket give <Name> <Amount>",ChatColor.YELLOW) +" - Give ticket to semeone");
             		}
             		if (isPlayer(sender) && TPermissions.permission(getPlayer(sender), "ticket.take", getPlayer(sender).isOp())){
-            			sendMessage(sender,colorizeText("/ticket take",ChatColor.YELLOW) +" - Take ticket to semeone");
+            			sendMessage(sender,colorizeText("/ticket take <Name> <Amount>",ChatColor.YELLOW) +" - Take ticket to semeone");
             		}	
         		}
         		else if (is(args[0],"send")){
-        			
+        			handled = true;
+        			if (isPlayer(sender) && TPermissions.permission(getPlayer(sender), "ticket.send", getPlayer(sender).isOp())){
+        				if (args[1] == null && args[2] == null){
+        					sendMessage(sender,colorizeText("/ticket send <Name> <Amount>",ChatColor.YELLOW) +" - Send ticket to semeone");
+        					return handled;
+        				}
+        				if (args[1] != null && !TTools.isInt(args[1])){
+        					
+        				}
+        				else {
+        					sendMessage(sender,colorizeText("Integer received for the first parameter. Expecting string.",ChatColor.RED));
+        				}
+        					
+        			}else{
+        				sendMessage(sender,colorizeText("Permission denied.",ChatColor.RED));
+    				} 
         		}
         		else if(is(args[0],"give")){
         			handled = true;
