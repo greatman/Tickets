@@ -237,7 +237,7 @@ public class TemplateCmd implements CommandExecutor {
         					return handled;
         				}
         				int ticket = getPlayerTicket(name);
-        				sendMessage(sender,colorizeText(name + "currently have ",ChatColor.GREEN) + ticket + colorizeText(" ticket(s)",ChatColor.GREEN));
+        				sendMessage(sender,colorizeText(name + " currently have ",ChatColor.GREEN) + ticket + colorizeText(" ticket(s)",ChatColor.GREEN));
         					
         			}else{
         				sendMessage(sender,colorizeText("Type /ticket help for help.",ChatColor.YELLOW));
