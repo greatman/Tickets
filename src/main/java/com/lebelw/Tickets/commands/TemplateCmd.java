@@ -222,7 +222,7 @@ public class TemplateCmd implements CommandExecutor {
         		}else{
         			handled = true;
         			if (isPlayer(sender) && TPermissions.permission(getPlayer(sender), "ticket.check", getPlayer(sender).isOp())){
-        				String name = args[1];
+        				String name = args[0];
         				try {
         					target = plugin.matchSinglePlayer(sender, name);
         					if (target.getName() != null){
