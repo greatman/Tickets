@@ -44,7 +44,7 @@ public class TemplateCmd implements CommandExecutor {
         				}
         				else
         					sendMessage(sender,colorizeText("You have 0 ticket",ChatColor.RED));
-        			
+        					sendMessage(sender,colorizeText("/ticket help for help",ChatColor.YELLOW));
 	        		} catch (SQLException se) {
 						TLogger.error(se.getMessage());
 	                }
@@ -59,6 +59,9 @@ public class TemplateCmd implements CommandExecutor {
             		sendMessage(sender, "You are using " + colorizeText(Tickets.name, ChatColor.GREEN)
                             + " version " + colorizeText(Tickets.version, ChatColor.GREEN) + ".");
             		sendMessage(sender, "Commands:");
+            		if (isPlayer(sender) && TPermissions.permission(getPlayer(sender), "ticket.check", getPlayer(sender).isOp())){
+            			sendMessage(sender,colorizeText("/ticket <Name>",ChatColor.YELLOW) +" - See semeone's else ticket amount");
+            		}
             		if (isPlayer(sender) && TPermissions.permission(getPlayer(sender), "ticket.give", getPlayer(sender).isOp())){
             			sendMessage(sender,colorizeText("/ticket give <Name> <Amount>",ChatColor.YELLOW) +" - Give ticket to semeone");
             		}
@@ -214,7 +217,29 @@ public class TemplateCmd implements CommandExecutor {
             		}
         			else{
         				sendMessage(sender,colorizeText("Permission denied.",ChatColor.RED));
-        			}        
+        			}
+        		//We check if we want to look at semeone else ticket
+        		}else{
+        			handled = true;
+        			if (isPlayer(sender) && TPermissions.permission(getPlayer(sender), "ticket.check", getPlayer(sender).isOp())){
+        				String name = args[1];
+        				try {
+        					target = plugin.matchSinglePlayer(sender, name);
+        					if (target.getName() != null){
+            					name = target.getName();
+            				}
+        				}catch (CommandException error){
+        					sendMessage(sender,colorizeText(error.getMessage() + " Type /ticket help for help.",ChatColor.RED));
+        					return handled;
+        				}
+        				int ticket = getPlayerTicket(name);
+        				sendMessage(sender,colorizeText(name + "currently have ",ChatColor.GREEN) + ticket + colorizeText(" ticket(s)",ChatColor.GREEN));
+        					
+        			}else{
+        				sendMessage(sender,colorizeText("Type /ticket help for help.",ChatColor.YELLOW));
+        				return handled;
+        			}
+        			
         		}
         	}
         	
@@ -300,17 +325,21 @@ public class TemplateCmd implements CommandExecutor {
      * @param name    The full name of the player.
      */
     private int getPlayerTicket(String name){
-    	ResultSet result = dbm.query("SELECT ticket FROM players WHERE name = '" + name + "'");
-		try {
-			if (result != null  && result.next()){
-				return result.getInt("Ticket");
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			TLogger.warning(e.getMessage());
-			return 0;
-		}
-		return 0;
+    	if (checkIfPlayerExists(name)){
+    		ResultSet result = dbm.query("SELECT ticket FROM players WHERE name = '" + name + "'");
+    		try {
+    			if (result != null  && result.next()){
+    				return result.getInt("Ticket");
+    			}
+    		} catch (SQLException e) {
+    			// TODO Auto-generated catch block
+    			TLogger.warning(e.getMessage());
+    			return 0;
+    		}
+    	}else {
+    		return 0;
+    	}
+    	return 0;
     }
     /*
      * Create a player ticket account
