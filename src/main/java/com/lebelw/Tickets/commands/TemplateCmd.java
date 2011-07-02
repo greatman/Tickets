@@ -73,10 +73,44 @@ public class TemplateCmd implements CommandExecutor {
         					sendMessage(sender,colorizeText("/ticket send <Name> <Amount>",ChatColor.YELLOW) +" - Send ticket to semeone");
         					return handled;
         				}
-        				if (args[1] != null && !TTools.isInt(args[1])){
+        				if (!TTools.isInt(args[1])){
+        					if (TTools.isInt(args[2])){
+        						String sendername = ((Player)sender).getName();
+        						String name = args[1];
+                				try {
+                					target = plugin.matchSinglePlayer(sender, name);
+                					if (target.getName() != null){
+                    					name = target.getName();
+                    				}
+                				}catch (CommandException error){
+                					sendMessage(sender,colorizeText(error.getMessage(),ChatColor.RED));
+                					return handled;
+                				}
+                				ticketarg = Integer.parseInt(args[2]);
+                				if (checkIfPlayerExists(sendername)){
+                			    		currentticket = getPlayerTicket(sendername);
+                						amount = currentticket - ticketarg;
+                						if (amount < 0){
+                							sendMessage(sender,colorizeText("You online have ",ChatColor.RED) + currentticket + colorizeText(" ticket(s)! You can't send ",ChatColor.RED) + ticketarg + colorizeText(" ticket(s)!",ChatColor.RED));
+                						}
+                						if (givePlayerTicket(name,ticketarg)){
+                							dbm.update("UPDATE players SET ticket=" + amount + " WHERE name = '" + name + "'");
+                							sendMessage(sender,colorizeText(args[2] +" ticket(s) has been given to "+ name,ChatColor.GREEN));
+                        					if (target.getName() != null){
+                        						sendMessage(target,colorizeText("You received "+ ticketarg +" ticket(s) from "+ ((Player)sender).getName() + ".",ChatColor.GREEN));
+                        					}
+                						}
+                						
+                						
+                			    }else{
+                			    	sendMessage(sender,colorizeText("You can't send ticket(s) because you don't have any!",ChatColor.RED));	
+                				}
+                				
+        					}else{
+                				sendMessage(sender,colorizeText("String received for the second parameter. Expecting integer.",ChatColor.RED));
+                			}
         					
-        				}
-        				else {
+        				}else {
         					sendMessage(sender,colorizeText("Integer received for the first parameter. Expecting string.",ChatColor.RED));
         				}
         					
@@ -104,21 +138,14 @@ public class TemplateCmd implements CommandExecutor {
                     					return handled;
                     				}
                     				ticketarg = Integer.parseInt(args[2]);
-                    				if (checkIfPlayerExists(name))
-                    				{
-                    					currentticket = getPlayerTicket(name);
-    	                				amount = currentticket + ticketarg;
-    	                				dbm.update("UPDATE players SET ticket=" + amount + " WHERE name = '" + name + "'");
-    	                			}
-    	                			else{
-    	                				dbm.insert("INSERT INTO players(name,ticket) VALUES('" + name + "'," + ticketarg + ")");
-    	                			}
-    	                			sendMessage(sender,colorizeText(args[2] +" ticket(s) has been given to "+ name,ChatColor.GREEN));
-    	                			if (target.getName() != null){
-                						sendMessage(target,colorizeText("You received "+ ticketarg +" ticket(s) from "+ ((Player)sender).getName() + ".",ChatColor.GREEN));
-                					}
-                    					
-                        		
+                    				if (givePlayerTicket(name,ticketarg)){
+                    					sendMessage(sender,colorizeText(args[2] +" ticket(s) has been given to "+ name,ChatColor.GREEN));
+                    					if (target.getName() != null){
+                    						sendMessage(target,colorizeText("You received "+ ticketarg +" ticket(s) from "+ ((Player)sender).getName() + ".",ChatColor.GREEN));
+                    					}
+                    				}else{
+                    					sendMessage(sender,colorizeText("A error occured",ChatColor.GREEN));
+                    				}
             				}
             				else{
                 				sendMessage(sender,colorizeText("String received for the second parameter. Expecting integer.",ChatColor.RED));
@@ -155,25 +182,17 @@ public class TemplateCmd implements CommandExecutor {
                     				}
                     				
                     				ticketarg = Integer.parseInt(args[2]);
-                    				if (checkIfPlayerExists(name))
-                    				{
-                    					currentticket = getPlayerTicket(name);
+                    				if (checkIfPlayerExists(name)){
+                    		    		currentticket = getPlayerTicket(name);
                     					amount = currentticket - ticketarg;
                     					if (amount < 0){
-    	                					sendMessage(sender,colorizeText("You can't remove ",ChatColor.RED) + ticketarg + colorizeText(" ticket(s)! This player only have ",ChatColor.RED) + currentticket + colorizeText(" ticket(s)!",ChatColor.RED));
-    	                				}else {
-    	                					dbm.update("UPDATE players SET ticket=" + amount + " WHERE name = '" + name + "'");
-    	                					sendMessage(sender,colorizeText(args[2] +" ticket(s) has been removed from "+ name,ChatColor.GREEN));
-    	                					if (target.getName() != null){
-    	                						sendMessage(target,colorizeText(ticketarg +" ticket(s) has been removed by "+ ((Player)sender).getName() + ".",ChatColor.RED));
-    	                					}
-    	                				}	
-    	                			}
-    	                			else {
-    	                				sendMessage(sender,colorizeText("You can't remove tickets to " + name + " because he doesn't have any!",ChatColor.RED));
-    	                			}
-                    					
-                        		
+                    						sendMessage(sender,colorizeText("You can't remove ",ChatColor.RED) + ticketarg + colorizeText(" ticket(s)! This player only have ",ChatColor.RED) + currentticket + colorizeText(" ticket(s)!",ChatColor.RED));
+                    					}
+                    					dbm.update("UPDATE players SET ticket=" + amount + " WHERE name = '" + name + "'");
+                    		    	}else{
+                    		    		sendMessage(sender,colorizeText("You can't remove tickets to " + name + " because he doesn't have any!",ChatColor.RED));
+                    		    		
+                    		    	}
             				}
             				else{
                 				sendMessage(sender,colorizeText("String received for the second parameter. Expecting integer.",ChatColor.RED));
@@ -246,6 +265,11 @@ public class TemplateCmd implements CommandExecutor {
     private String colorizeText(String text, ChatColor color) {
         return color + text + ChatColor.WHITE;
     }
+    /*
+     * Checks if a player account exists
+     * 
+     * @param name    The full name of the player.
+     */
     private boolean checkIfPlayerExists(String name)
     {
     	ResultSet result = dbm.query("SELECT id FROM players WHERE name = '" + name + "'");
@@ -261,6 +285,11 @@ public class TemplateCmd implements CommandExecutor {
 		return false;
     	
     }
+    /*
+     * Get the amount of tickets a player have
+     * 
+     * @param name    The full name of the player.
+     */
     private int getPlayerTicket(String name){
     	ResultSet result = dbm.query("SELECT ticket FROM players WHERE name = '" + name + "'");
 		try {
@@ -273,5 +302,34 @@ public class TemplateCmd implements CommandExecutor {
 			return 0;
 		}
 		return 0;
+    }
+    /*
+     * Create a player ticket account
+     * 
+     * @param name    The full name of the player.
+     */
+    private boolean createPlayerTicketAccount(String name){
+    	if (!checkIfPlayerExists(name)){
+    		if(dbm.insert("INSERT INTO players(name) VALUES('" + name + "')")){
+    			return true;
+    		}else{
+    			return false;
+    		}
+    	}else{
+    		return false;
+    	}
+    }
+    private boolean givePlayerTicket(String name, Integer amount){
+    	if (checkIfPlayerExists(name)){
+    		currentticket = getPlayerTicket(name);
+			amount = currentticket + amount;
+			return dbm.update("UPDATE players SET ticket=" + amount + " WHERE name = '" + name + "'");
+    	}else{
+    		if (createPlayerTicketAccount(name)){
+    			return dbm.update("UPDATE players SET ticket=" + amount + " WHERE name = '" + name + "'");
+    		}else{
+    			return false;
+    		}
+    	}
     }
 }
