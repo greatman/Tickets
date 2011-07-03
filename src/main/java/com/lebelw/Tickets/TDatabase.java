@@ -3,7 +3,7 @@ package com.lebelw.Tickets;
 import com.alta189.sqlLibrary.SQL.SQLCore;
 import com.alta189.sqlLibrary.SQL.SQLCore.SQLMode;
 import com.lebelw.Tickets.extras.DataManager;
-
+import com.lebelw.Tickets.TConfig;
 /**
  * @description Handles SQL database connection
  * @author Tagette
