@@ -21,17 +21,30 @@ public class TDatabase {
     public static void initialize(Tickets instance){
         TDatabase.plugin = instance;
         SQLMode dataMode;
-        dataMode = SQLMode.SQLite;
+        String tableQuery;
+        if(TConfig.type == "mysql")
+            dataMode = SQLMode.MySQL;
+        else
+            dataMode = SQLMode.SQLite;
         dbm = new DataManager(plugin, dataMode);
         
         // Create database here
         
         // -- Example --
         // This will create a table with the name "players".
-        String tableQuery = "CREATE TABLE players ("
-                + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-                + "name VARCHAR(30),"
-                + "ticket INT(11) DEFAULT '0')";
+        if (dataMode == SQLMode.MySQL){
+        	tableQuery = "CREATE TABLE `logblock`.`players` ("
+        						+ "`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,"
+        						+ "`name` VARCHAR( 30 ) NOT NULL ,"
+        						+ "`ticket` INT NOT NULL"
+        						+") ENGINE = MYISAM ;";
+        }else {
+        	tableQuery = "CREATE TABLE players ("
+                    + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                    + "name VARCHAR(30),"
+                    + "ticket INT(11) DEFAULT '0')";
+        }
+        
         if(!dbm.tableExists("players") && dbm.createTable(tableQuery))
             TLogger.info("Table created. (players)");
         

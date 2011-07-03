@@ -3,6 +3,8 @@ package com.lebelw.Tickets.extras;
 import com.alta189.sqlLibrary.SQL.SQLCore;
 import com.alta189.sqlLibrary.SQL.SQLCore.SQLMode;
 import java.sql.ResultSet;
+
+import com.lebelw.Tickets.TConfig;
 import com.lebelw.Tickets.TLogger;
 import com.lebelw.Tickets.Tickets;
 
@@ -22,6 +24,10 @@ public class DataManager {
      */
     public DataManager(Tickets instance, SQLMode mode) {
         plugin = instance;
+        if (mode == SQLMode.MySQL) {
+            dbCore = new SQLCore(TLogger.getLog(), TLogger.getPrefix(), TConfig.hostname,
+                    TConfig.username, TConfig.password, TConfig.database);
+        }
         if (mode == SQLMode.SQLite) {
             dbCore = new SQLCore(TLogger.getLog(), TLogger.getPrefix(),
                     plugin.getDataFolder().getPath() + "/Data", Tickets.name);
