@@ -183,7 +183,8 @@ public class TemplateCmd implements CommandExecutor {
         			handled = true;
         			if (isPlayer(sender) && TPermissions.permission(getPlayer(sender), "ticket.buy", getPlayer(sender).isOp())){
         				if (args.length == 1){
-        					sendMessage(sender,colorizeText("/ticket buy <Amount>",ChatColor.YELLOW) +" - Buy tickets (No argument gives the cost)");
+        					sendMessage(sender,colorizeText("Cost for 1 ticket:",ChatColor.YELLOW) + colorizeText(iConomy.format(TConfig.cost),ChatColor.GREEN));
+        					sendMessage(sender,colorizeText("/ticket buy <Amount>",ChatColor.YELLOW));
         					return handled;
         				}
         				if (plugin.iConomy != null){
@@ -210,7 +211,7 @@ public class TemplateCmd implements CommandExecutor {
         							sendMessage(sender,colorizeText("String received for the second parameter. Expecting integer.",ChatColor.RED));
         						}
         					}else{
-        						sendMessage(sender,colorizeText("Cost for 1 ticket:",ChatColor.YELLOW) + colorizeText(iConomy.format(TConfig.cost),ChatColor.GREEN));
+        						sendMessage(sender,colorizeText("The argument is required!",ChatColor.RED));
         					}
         				}else{
         					sendMessage(sender,colorizeText("iConomy must be loaded!",ChatColor.RED));
