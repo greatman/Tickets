@@ -22,10 +22,8 @@ public class TDatabase {
         TDatabase.plugin = instance;
         SQLMode dataMode;
         String tableQuery;
-        TLogger.info(TConfig.type);
         
         if(TConfig.type.equals("mysql")){
-        	TLogger.info("I am in MySQL");
         	dataMode = SQLMode.MySQL;
         }
         else
