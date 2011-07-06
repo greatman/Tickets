@@ -20,12 +20,15 @@ import org.bukkit.event.Event;
 import com.lebelw.Tickets.commands.TemplateCmd;
 import com.lebelw.Tickets.extras.CommandManager;
 
+import com.iConomy.*;
+
 public class Tickets extends JavaPlugin {
 	private int debug = 0;
 	public static String name;
     public static String version;
 	private final TServerListener serverListener = new TServerListener(this);
 	private final CommandManager commandManager = new CommandManager(this);
+	public iConomy iConomy = null;
 	public void onEnable() {
 		name = this.getDescription().getName();
 		version = this.getDescription().getVersion();
@@ -44,6 +47,7 @@ public class Tickets extends JavaPlugin {
 		//Let's setup commands
 		addCommand("ticket", new TemplateCmd(this));
 	}
+	
 	public void onDisable(){
 		TDatabase.disable();
 		TLogger.info("Disabled");
