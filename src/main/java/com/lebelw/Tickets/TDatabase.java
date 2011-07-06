@@ -27,6 +27,7 @@ public class TDatabase {
         String tableQuery;
         
         if (TConfig.convert){
+        	TLogger.info("Converting database to MySQL");
         	DataManager sqlite = new DataManager(plugin,SQLMode.SQLite);
         	DataManager mysql = new DataManager(plugin,SQLMode.MySQL);
         	tableQuery = "CREATE TABLE `players` ("
