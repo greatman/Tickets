@@ -61,7 +61,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com</groupId>
-			<artifactId>Iconomy</artifactId>
+			<artifactId>iConomy</artifactId>
 			<version>5.0.1</version>
 			<type>jar</type>
 			<scope>compile</scope>
