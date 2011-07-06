@@ -37,7 +37,7 @@ public class TDatabase {
         // -- Example --
         // This will create a table with the name "players".
         if (dataMode == SQLMode.MySQL){
-        	tableQuery = "CREATE TABLE `logblock`.`players` ("
+        	tableQuery = "CREATE TABLE `players` ("
         						+ "`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,"
         						+ "`name` VARCHAR( 30 ) NOT NULL ,"
         						+ "`ticket` INT NOT NULL"
