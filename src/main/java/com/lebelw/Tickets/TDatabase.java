@@ -22,6 +22,7 @@ public class TDatabase {
         TDatabase.plugin = instance;
         SQLMode dataMode;
         String tableQuery;
+        TLogger.info(TConfig.type);
         if(TConfig.type == "mysql")
             dataMode = SQLMode.MySQL;
         else
