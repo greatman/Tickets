@@ -15,7 +15,7 @@ public class TConfig {
     public TConfig(Tickets instance) {
         plugin = instance; 
     }
-    public String directory = "plugins" + File.separator + plugin.getDescription().getName();
+    public String directory = "plugins" + File.separator + "Tickets";
     File file = new File(directory + File.separator + "config.yml");
     
 
