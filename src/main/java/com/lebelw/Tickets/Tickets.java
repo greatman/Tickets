@@ -33,10 +33,10 @@ public class Tickets extends JavaPlugin {
         // Makes sure all plugins are correctly loaded.
         pm.registerEvent(Event.Type.PLUGIN_ENABLE, pluginListener, Priority.Monitor, this);
 		TLogger.initialize(Logger.getLogger("Minecraft"));
-		TDatabase.initialize(this);
-		TPermissions.initialize(this);
 		TConfig TConfig = new TConfig(this);
 		TConfig.configCheck();
+		TDatabase.initialize(this);
+		TPermissions.initialize(this);
 		TLogger.info("Enabled");
 		
 		
