@@ -93,7 +93,7 @@ public class TConfig {
     	write("Database.username", "root");
     	write("Database.password", "");
     	write("Database.database", "tickets");
-    	write("Database.convert", "false");
+    	write("Database.convert", false);
     	write("Ticket.cost","10");
     	write("Lottery.winchance",1);
     	write("Lottery.winchanceoutof",1000);

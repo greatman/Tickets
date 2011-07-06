@@ -33,7 +33,7 @@ public class TDatabase {
         	tableQuery = "CREATE TABLE `players` ("
 					+ "`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,"
 					+ "`name` VARCHAR( 30 ) NOT NULL ,"
-					+ "`ticket` INT NOT NULL DEFAULT '0'"
+					+ "`ticket` BIGINT NOT NULL DEFAULT '0'"
 					+") ENGINE = MYISAM ;";
         	if(!mysql.tableExists("players") && mysql.createTable(tableQuery))
                 TLogger.info("Table created. (players)");
@@ -66,13 +66,13 @@ public class TDatabase {
         	tableQuery = "CREATE TABLE `players` ("
         						+ "`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,"
         						+ "`name` VARCHAR( 30 ) NOT NULL ,"
-        						+ "`ticket` INT NOT NULL DEFAULT '0'"
+        						+ "`ticket` BIGINT NOT NULL DEFAULT '0'"
         						+") ENGINE = MYISAM ;";
         }else {
         	tableQuery = "CREATE TABLE players ("
                     + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
                     + "name VARCHAR(30),"
-                    + "ticket INT(11) DEFAULT '0')";
+                    + "ticket BIGINT DEFAULT '0')";
         }
         
         if(!dbm.tableExists("players") && dbm.createTable(tableQuery))
