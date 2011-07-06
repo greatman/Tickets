@@ -75,6 +75,9 @@ public class TemplateCmd implements CommandExecutor {
             		if (isPlayer(sender) && TPermissions.permission(getPlayer(sender), "ticket.send", getPlayer(sender).isOp())){
             			sendMessage(sender,colorizeText("/ticket send <Name> <Amount>",ChatColor.YELLOW) +" - Send ticket to semeone");
             		}
+            		if (isPlayer(sender) && TPermissions.permission(getPlayer(sender), "ticket.buy", getPlayer(sender).isOp())){
+            			sendMessage(sender,colorizeText("/ticket buy <Amount>",ChatColor.YELLOW) +" - Buy tickets with money.");
+            		}
         		}
         		else if (is(args[0],"send")){
         			handled = true;
@@ -178,7 +181,11 @@ public class TemplateCmd implements CommandExecutor {
         		//Is the first argument take?
         		else if (is(args[0],"buy")){
         			handled = true;
-        			if (isPlayer(sender) && TPermissions.permission(getPlayer(sender), "ticket.take", getPlayer(sender).isOp())){
+        			if (isPlayer(sender) && TPermissions.permission(getPlayer(sender), "ticket.buy", getPlayer(sender).isOp())){
+        				if (args.length == 1){
+        					sendMessage(sender,colorizeText("/ticket buy <Amount>",ChatColor.YELLOW) +" - Buy tickets (No argument gives the cost)");
+        					return handled;
+        				}
         				if (plugin.iConomy != null){
         					if (args[1] != null){
         						if (TTools.isInt(args[1])){
