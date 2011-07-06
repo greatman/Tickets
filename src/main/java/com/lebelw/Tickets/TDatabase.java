@@ -40,7 +40,7 @@ public class TDatabase {
         	tableQuery = "CREATE TABLE `players` ("
         						+ "`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,"
         						+ "`name` VARCHAR( 30 ) NOT NULL ,"
-        						+ "`ticket` INT NOT NULL"
+        						+ "`ticket` INT NOT NULL DEFAULT '0'"
         						+") ENGINE = MYISAM ;";
         }else {
         	tableQuery = "CREATE TABLE players ("
