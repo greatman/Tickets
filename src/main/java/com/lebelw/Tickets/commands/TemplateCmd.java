@@ -412,7 +412,4 @@ public class TemplateCmd implements CommandExecutor {
     		}
     	}
     }
-    private void removePlayerMoney(String name, Integer amount) throws TicketError{
-    	
-    }
 }
