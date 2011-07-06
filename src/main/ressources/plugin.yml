@@ -1,6 +1,6 @@
 name: Tickets
 main: com.lebelw.Tickets.Tickets
-version: 0.3
+version: 0.3.5
 commands:
     ticket:
         description: Take care of the tickets
