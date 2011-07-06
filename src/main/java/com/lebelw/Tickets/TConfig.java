@@ -4,17 +4,23 @@ import java.io.File;
 import java.util.List;
 
 import org.bukkit.util.config.Configuration;
-
+/**
+ * @description Contains all the functions for configuration file handling
+ * @author greatman
+ *
+ */
 public class TConfig {
-    private static Tickets plugin;
     public static String hostname;
     public static String type;
     public static String username;
     public static String password;
     public static String database;
     public static double cost;
+    public static int winchance;
+    public static int winchanceoutof;
+    public static boolean convert;
     public TConfig(Tickets instance) {
-        plugin = instance; 
+        
     }
     public String directory = "plugins" + File.separator + "Tickets";
     File file = new File(directory + File.separator + "config.yml");
@@ -38,6 +44,9 @@ public class TConfig {
 
             loadkeys();
         }
+    }
+    public void resetconvert() {
+    	write("Database.convert",false);
     }
     private void write(String root, Object x){
         Configuration config = load();
@@ -79,12 +88,15 @@ public class TConfig {
     }
     private void addDefaults(){
         TLogger.info("Generating Config File...");
-    write("Database.type", "sqlite");
-    write("Database.hostname", "localhost");
-    write("Database.username", "root");
-    write("Database.password", "");
-    write("Database.database", "tickets");
-    write("Ticket.cost","10");
+        write("Database.type", "sqlite");
+    	write("Database.hostname", "localhost");
+    	write("Database.username", "root");
+    	write("Database.password", "");
+    	write("Database.database", "tickets");
+    	write("Database.convert", "false");
+    	write("Ticket.cost","10");
+    	write("Lottery.winchance",1);
+    	write("Lottery.winchanceoutof",1000);
      loadkeys();
     }
     private void loadkeys(){
@@ -94,6 +106,9 @@ public class TConfig {
         username = readString("Database.username");
         password = readString("Database.password");
         database = readString("Database.database");
+        convert = readBoolean("Database.convert");
         cost = readDouble("Ticket.cost");
+        winchance = readInteger("Lottery.winchance",1);
+        winchanceoutof = readInteger("Lottery.winchanceoutof", 1000);
         }
 }

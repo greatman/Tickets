@@ -4,9 +4,12 @@ import com.alta189.sqlLibrary.SQL.SQLCore;
 import com.alta189.sqlLibrary.SQL.SQLCore.SQLMode;
 import com.lebelw.Tickets.extras.DataManager;
 import com.lebelw.Tickets.TConfig;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 /**
  * @description Handles SQL database connection
  * @author Tagette
+ * @author Greatman
  */
 public class TDatabase {
     
@@ -23,6 +26,30 @@ public class TDatabase {
         SQLMode dataMode;
         String tableQuery;
         
+        if (TConfig.convert){
+        	DataManager sqlite = new DataManager(plugin,SQLMode.SQLite);
+        	DataManager mysql = new DataManager(plugin,SQLMode.MySQL);
+        	tableQuery = "CREATE TABLE `players` ("
+					+ "`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,"
+					+ "`name` VARCHAR( 30 ) NOT NULL ,"
+					+ "`ticket` INT NOT NULL DEFAULT '0'"
+					+") ENGINE = MYISAM ;";
+        	if(!mysql.tableExists("players") && mysql.createTable(tableQuery))
+                TLogger.info("Table created. (players)");
+        	ResultSet responsesqlite = sqlite.query("SELECT * FROM players");
+        	if (responsesqlite != null  ){
+        		try {
+					while(responsesqlite.next()) {
+						String query = "INSERT INTO players VALUES("+ responsesqlite.getInt("id") + ",'" + responsesqlite.getString("name")+"','" + responsesqlite.getString("ticket") + "')";
+						mysql.insert(query);
+					}
+				} catch (SQLException e) {
+					TLogger.error(e.getMessage());
+				}
+			}
+        	TConfig TConfig = new TConfig(TDatabase.plugin);
+        	TConfig.resetconvert();
+        }
         if(TConfig.type.equals("mysql")){
         	dataMode = SQLMode.MySQL;
         }
