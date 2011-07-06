@@ -3,11 +3,10 @@ package com.lebelw.Tickets.commands;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.iConomy.*;
-import com.iConomy.system.Holdings;
 import com.lebelw.Tickets.TConfig;
 import com.lebelw.Tickets.TDatabase;
 import com.lebelw.Tickets.TLogger;
+import com.lebelw.Tickets.TMoney;
 import com.lebelw.Tickets.TPermissions;
 import com.lebelw.Tickets.TTools;
 import com.lebelw.Tickets.Tickets;
@@ -29,9 +28,11 @@ public class TemplateCmd implements CommandExecutor {
     DataManager dbm = TDatabase.dbm;
     Player target;
     int currentticket, ticketarg, amount;
+    TMoney TMoney;
     
     public TemplateCmd(Tickets instance) {
         plugin = instance;
+        TMoney = new TMoney(plugin);
     }
 
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -183,26 +184,25 @@ public class TemplateCmd implements CommandExecutor {
         			handled = true;
         			if (isPlayer(sender) && TPermissions.permission(getPlayer(sender), "ticket.buy", getPlayer(sender).isOp())){
         				if (args.length == 1){
-        					sendMessage(sender,colorizeText("Cost for 1 ticket:",ChatColor.YELLOW) + colorizeText(iConomy.format(TConfig.cost),ChatColor.GREEN));
+        					sendMessage(sender,colorizeText("Cost for 1 ticket:",ChatColor.YELLOW) + colorizeText(TMoney.formatText(TConfig.cost),ChatColor.GREEN));
         					sendMessage(sender,colorizeText("/ticket buy <Amount>",ChatColor.YELLOW));
         					return handled;
         				}
-        				if (plugin.iConomy != null){
+        				if (TMoney.checkIfEconomyPlugin()){
         					if (args[1] != null){
         						if (TTools.isInt(args[1])){
         							String name = ((Player)sender).getName();
         							double amount = Double.parseDouble(args[1]);
         							int tickets = Integer.parseInt(args[1]);
-        							if (iConomy.hasAccount(name)){
-        								Holdings balance = iConomy.getAccount(name).getHoldings();
+        							if (TMoney.checkIfAccountExists(name)){
         								double price = amount * TConfig.cost;
-        								if(balance.hasEnough(price)){
+        								if(TMoney.checkIfEnough(name, price)){
         									if (givePlayerTicket(name,tickets)){
-        										balance.subtract(price);
-        										sendMessage(sender,colorizeText("You just bought ",ChatColor.GREEN) + tickets + colorizeText(" for ",ChatColor.GREEN) + iConomy.format(price));
+        										TMoney.removeMoney(name, price);
+        										sendMessage(sender,colorizeText("You just bought ",ChatColor.GREEN) + tickets + colorizeText(" for ",ChatColor.GREEN) + TMoney.formatText(price));
         									}
         								}else{
-        									sendMessage(sender,colorizeText("You don't have enough money! You need ",ChatColor.RED) + colorizeText(iConomy.format(price),ChatColor.WHITE));
+        									sendMessage(sender,colorizeText("You don't have enough money! You need ",ChatColor.RED) + colorizeText(TMoney.formatText(price),ChatColor.WHITE));
         								}
         							}else {
         								sendMessage(sender,colorizeText("You don't have any accounts!",ChatColor.RED));
@@ -214,7 +214,7 @@ public class TemplateCmd implements CommandExecutor {
         						sendMessage(sender,colorizeText("The argument is required!",ChatColor.RED));
         					}
         				}else{
-        					sendMessage(sender,colorizeText("iConomy must be loaded!",ChatColor.RED));
+        					sendMessage(sender,colorizeText("A economy system must be loaded!",ChatColor.RED));
         				}
         			}
         		}

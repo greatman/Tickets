@@ -21,7 +21,7 @@ import com.lebelw.Tickets.commands.TemplateCmd;
 import com.lebelw.Tickets.extras.CommandManager;
 
 import com.iConomy.*;
-
+import cosine.boseconomy.*;
 public class Tickets extends JavaPlugin {
 	private int debug = 0;
 	public static String name;
@@ -29,6 +29,7 @@ public class Tickets extends JavaPlugin {
 	private final TServerListener serverListener = new TServerListener(this);
 	private final CommandManager commandManager = new CommandManager(this);
 	public iConomy iConomy = null;
+	public BOSEconomy BOSEconomy = null;
 	public void onEnable() {
 		name = this.getDescription().getName();
 		version = this.getDescription().getVersion();

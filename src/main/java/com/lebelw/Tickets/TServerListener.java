@@ -6,6 +6,7 @@ import org.bukkit.event.server.ServerListener;
 import org.bukkit.plugin.Plugin;
 
 import com.iConomy.*;
+import cosine.boseconomy.*;
 /**
  * @description Handles enabling plugins
  * @author Tagette
@@ -30,6 +31,16 @@ public class TServerListener extends ServerListener {
                 }
             }
         }
+        if (plugin.BOSEconomy == null) {
+        	Plugin BOSEconomy = plugin.getServer().getPluginManager().getPlugin("BOSEconomy");
+        	if (BOSEconomy != null)
+        	{
+        		if(BOSEconomy.isEnabled()){
+        			plugin.BOSEconomy = (BOSEconomy)BOSEconomy;
+        			TLogger.info("Hooked into BOSEconomy");
+        		}
+        	}
+        }
     }
 
 
@@ -39,6 +50,12 @@ public class TServerListener extends ServerListener {
             if (event.getPlugin().getDescription().getName().equals("iConomy")) {
                 plugin.iConomy = null;
                 TLogger.info("un-hooked from iConomy.");
+            }
+        }
+        if (plugin.BOSEconomy != null) {
+            if (event.getPlugin().getDescription().getName().equals("BOSEconomy")) {
+                plugin.BOSEconomy = null;
+                TLogger.info("un-hooked from BOSEconomy.");
             }
         }
     }
