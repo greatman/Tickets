@@ -2,6 +2,10 @@ package com.lebelw.Tickets.commands;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import com.iConomy.*;
+import com.iConomy.system.Holdings;
+import com.lebelw.Tickets.TConfig;
 import com.lebelw.Tickets.TDatabase;
 import com.lebelw.Tickets.TLogger;
 import com.lebelw.Tickets.TPermissions;
@@ -172,6 +176,40 @@ public class TemplateCmd implements CommandExecutor {
         			}        			
         		}
         		//Is the first argument take?
+        		else if (is(args[0],"buy")){
+        			handled = true;
+        			if (isPlayer(sender) && TPermissions.permission(getPlayer(sender), "ticket.take", getPlayer(sender).isOp())){
+        				if (plugin.iConomy != null){
+        					if (args[1] != null){
+        						if (TTools.isInt(args[1])){
+        							String name = ((Player)sender).getName();
+        							double amount = Double.parseDouble(args[1]);
+        							int tickets = Integer.parseInt(args[1]);
+        							if (iConomy.hasAccount(name)){
+        								Holdings balance = iConomy.getAccount(name).getHoldings();
+        								double price = amount * TConfig.cost;
+        								if(balance.hasEnough(price)){
+        									if (givePlayerTicket(name,tickets)){
+        										balance.subtract(price);
+        										sendMessage(sender,colorizeText("You just bought ",ChatColor.GREEN) + tickets + colorizeText(" for ",ChatColor.GREEN) + iConomy.format(price));
+        									}
+        								}else{
+        									sendMessage(sender,colorizeText("You don't have enough money! You need ",ChatColor.RED) + colorizeText(iConomy.format(price),ChatColor.WHITE));
+        								}
+        							}else {
+        								sendMessage(sender,colorizeText("You don't have any accounts!",ChatColor.RED));
+        							}
+        						}else{
+        							sendMessage(sender,colorizeText("String received for the second parameter. Expecting integer.",ChatColor.RED));
+        						}
+        					}else{
+        						sendMessage(sender,colorizeText("Cost for 1 ticket:",ChatColor.YELLOW) + colorizeText(iConomy.format(TConfig.cost),ChatColor.GREEN));
+        					}
+        				}else{
+        					sendMessage(sender,colorizeText("iConomy must be loaded!",ChatColor.RED));
+        				}
+        			}
+        		}
         		else if(is(args[0],"take")){
         			handled = true;
         			if (isPlayer(sender) && TPermissions.permission(getPlayer(sender), "ticket.take", getPlayer(sender).isOp())){
@@ -373,5 +411,8 @@ public class TemplateCmd implements CommandExecutor {
     			return false;
     		}
     	}
+    }
+    private void removePlayerMoney(String name, Integer amount) throws TicketError{
+    	
     }
 }

@@ -26,7 +26,7 @@ public class TServerListener extends ServerListener {
             if (iConomy != null) {
                 if (iConomy.isEnabled() && iConomy.getClass().getName().equals("com.iConomy.iConomy")) {
                     plugin.iConomy = (iConomy)iConomy;
-                    System.out.println("[MyPlugin] hooked into iConomy.");
+                    TLogger.info("Hooked into iConomy");
                 }
             }
         }
@@ -35,5 +35,12 @@ public class TServerListener extends ServerListener {
 
     @Override
     public void onPluginDisable(PluginDisableEvent event) {
+        if (plugin.iConomy != null) {
+            if (event.getPlugin().getDescription().getName().equals("iConomy")) {
+                plugin.iConomy = null;
+                TLogger.info("un-hooked from iConomy.");
+            }
+        }
     }
+
 }

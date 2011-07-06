@@ -12,6 +12,7 @@ public class TConfig {
     public static String username;
     public static String password;
     public static String database;
+    public static double cost;
     public TConfig(Tickets instance) {
         plugin = instance; 
     }
@@ -83,6 +84,7 @@ public class TConfig {
     write("Database.username", "root");
     write("Database.password", "");
     write("Database.database", "tickets");
+    write("Ticket.cost","10");
      loadkeys();
     }
     private void loadkeys(){
@@ -92,6 +94,6 @@ public class TConfig {
         username = readString("Database.username");
         password = readString("Database.password");
         database = readString("Database.database");
-
+        cost = readDouble("Ticket.cost");
         }
 }
