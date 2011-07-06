@@ -23,8 +23,10 @@ public class TDatabase {
         SQLMode dataMode;
         String tableQuery;
         TLogger.info(TConfig.type);
-        if(TConfig.type == "mysql")
-            dataMode = SQLMode.MySQL;
+        if(TConfig.type == "mysql"){
+        	TLogger.info("I am in MySQL");
+        	dataMode = SQLMode.MySQL;
+        }
         else
             dataMode = SQLMode.SQLite;
         dbm = new DataManager(plugin, dataMode);
