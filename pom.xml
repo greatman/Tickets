@@ -59,6 +59,13 @@
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
+		<dependency>
+			<groupId>com</groupId>
+			<artifactId>Iconomy</artifactId>
+			<version>5.0.1</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
