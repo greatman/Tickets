@@ -55,7 +55,7 @@ public class TConfig {
     }
     private Boolean readBoolean(String root){
         Configuration config = load();
-        return config.getBoolean(root, true);
+        return config.getBoolean(root, false);
     }
 
     private Double readDouble(String root){
