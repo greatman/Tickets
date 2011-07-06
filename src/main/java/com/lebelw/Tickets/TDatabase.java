@@ -48,6 +48,7 @@ public class TDatabase {
 					TLogger.error(e.getMessage());
 				}
 			}
+        	TLogger.info("Convert finished");
         	TConfig TConfig = new TConfig(TDatabase.plugin);
         	TConfig.resetconvert();
         }
