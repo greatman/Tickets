@@ -12,11 +12,12 @@ public class TConfig {
     public static String username;
     public static String password;
     public static String database;
-    public String directory = "plugins" + File.separator +plugin.getDescription().getName();
-    File file = new File(directory + File.separator + "config.yml");
     public TConfig(Tickets instance) {
         plugin = instance; 
     }
+    public String directory = "plugins" + File.separator + plugin.getDescription().getName();
+    File file = new File(directory + File.separator + "config.yml");
+    
 
        
 
