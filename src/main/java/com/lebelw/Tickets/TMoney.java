@@ -36,7 +36,7 @@ public class TMoney {
 		if (plugin.BOSEconomy != null){
 			
 			int amountbose = (int) amount;
-			return plugin.BOSEconomy.addPlayerMoney(name,amountbose,false);
+			return plugin.BOSEconomy.addPlayerMoney(name,-amountbose,false);
 		}
 		return false;
 	}
@@ -62,9 +62,9 @@ public class TMoney {
 		if (plugin.BOSEconomy != null){
 			int amountbose = (int) amount;
 			if (amountbose > 1)
-				return amountbose + plugin.BOSEconomy.getMoneyNamePluralCaps();
+				return amountbose + " " + plugin.BOSEconomy.getMoneyNamePluralCaps();
 			else
-				return amountbose + plugin.BOSEconomy.getMoneyNameCaps();
+				return amountbose + " " + plugin.BOSEconomy.getMoneyNameCaps();
 		}
 		return "Undefined";
 		
