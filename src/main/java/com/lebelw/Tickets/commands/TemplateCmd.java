@@ -84,6 +84,10 @@ public class TemplateCmd implements CommandExecutor {
             		if (isPlayer(sender) && TPermissions.permission(getPlayer(sender), "ticket.buy", getPlayer(sender).isOp())){
             			sendMessage(sender,colorizeText("/ticket buy <Amount>",ChatColor.YELLOW) +" - Buy tickets with money.");
             		}
+            		if (isPlayer(sender) && TPermissions.permission(getPlayer(sender), "ticket.lottery", getPlayer(sender).isOp())){
+            			sendMessage(sender,colorizeText("/ticket lottery <Number>",ChatColor.YELLOW) + "- Win a item with ticket lottery!");
+            		}
+            		
         		}
         		else if (is(args[0],"send")){
         			handled = true;
