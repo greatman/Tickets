@@ -1,6 +1,6 @@
 name: Tickets
 main: com.lebelw.Tickets.Tickets
-version: 0.5 (${env.BUILD_NUMBER})
+version: 0.5 (#${env.BUILD_NUMBER})
 commands:
     ticket:
         description: Take care of the tickets
