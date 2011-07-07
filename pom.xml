@@ -7,6 +7,7 @@
 	<version>0.5-SNAPSHOT</version>
 	<name>Tickets</name>
 	<url>None</url>
+	<packaging>jar</packaging>
 	<scm>
 		<connection>scm:git:git://github.com/greatman/Tickets.git</connection>
 		<url>https://github.com/greatman/Tickets</url>
