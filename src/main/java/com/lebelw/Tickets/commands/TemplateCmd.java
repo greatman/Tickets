@@ -121,7 +121,7 @@ public class TemplateCmd implements CommandExecutor {
                 							return handled;
                 						}
                 						if (givePlayerTicket(name,ticketarg)){
-                							removePlayerTicket(sendername,ticketarg)
+                							removePlayerTicket(sendername,ticketarg);
                 							sendMessage(sender,colorizeText(args[2] +" ticket(s) has been given to "+ name,ChatColor.GREEN));
                         					if (target.getName() != null){
                         						sendMessage(target,colorizeText("You received "+ ticketarg +" ticket(s) from "+ ((Player)sender).getName() + ".",ChatColor.GREEN));
