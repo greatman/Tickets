@@ -454,7 +454,6 @@ public class TemplateCmd implements CommandExecutor {
     	if (checkIfPlayerExists(name)){
     		currentticket = getPlayerTicket(name);
 			amount = currentticket + amount;
-			TLogger.info("About to give stuff");
 			return dbm.update("UPDATE players SET ticket=" + amount + " WHERE name = '" + name + "'");
     	}else{
     		if (createPlayerTicketAccount(name)){
