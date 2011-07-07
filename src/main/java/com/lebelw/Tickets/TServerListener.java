@@ -6,6 +6,7 @@ import org.bukkit.event.server.ServerListener;
 import org.bukkit.plugin.Plugin;
 
 import com.iConomy.*;
+
 import cosine.boseconomy.*;
 /**
  * @description Handles enabling plugins

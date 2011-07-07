@@ -22,6 +22,7 @@ import com.lebelw.Tickets.extras.CommandManager;
 
 import com.iConomy.*;
 import cosine.boseconomy.*;
+
 public class Tickets extends JavaPlugin {
 	private int debug = 0;
 	public static String name;

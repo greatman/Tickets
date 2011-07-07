@@ -2,7 +2,6 @@ package com.alta189.sqlLibrary.SQL;
 
 import com.alta189.sqlLibrary.SQL.SQLCore.SQLMode;
 import java.io.File;
-import java.net.MalformedURLException;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;

@@ -13,11 +13,9 @@ import org.bukkit.command.CommandSender;
  */
 public class CommandManager {
 
-    private Tickets plugin;
     private Map<String, CommandExecutor> commands = new Hashtable<String, CommandExecutor>();
 
     public CommandManager(Tickets instance) {
-        this.plugin = instance;
     }
 
     public void addCommand(String label, CommandExecutor executor) {

@@ -2,6 +2,7 @@ package com.lebelw.Tickets.commands;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Random;
 
 import com.lebelw.Tickets.TConfig;
 import com.lebelw.Tickets.TDatabase;
@@ -12,11 +13,15 @@ import com.lebelw.Tickets.TTools;
 import com.lebelw.Tickets.Tickets;
 import com.lebelw.Tickets.extras.DataManager;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandException;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+
 
 /**
  * @description Handles a command.
@@ -267,6 +272,40 @@ public class TemplateCmd implements CommandExecutor {
             		}
         			else{
         				sendMessage(sender,colorizeText("Permission denied.",ChatColor.RED));
+        			}
+        		}else if (is(args[0],"lottery")){
+        			handled = true;
+        			if (isPlayer(sender) && TPermissions.permission(getPlayer(sender), "ticket.lottery", getPlayer(sender).isOp())){
+        				if (args.length == 1){
+        					sendMessage(sender,colorizeText("/ticket lottery <Number>",ChatColor.YELLOW));
+        					return handled;
+        				}
+        				if (args[1] != null && TTools.isInt(args[1])){
+        					int lotteryticket = Integer.parseInt(args[1]);
+        					if (lotteryticket > TConfig.chance){
+        						int numberchance = TConfig.chance - 1;
+        						sendMessage(sender,colorizeText("You must choose a number from",ChatColor.RED) + "0" + colorizeText(" to ",ChatColor.RED) + numberchance);
+        					}
+        					String name = ((Player)sender).getName();
+        					currentticket = getPlayerTicket(name);
+        					
+        					amount = currentticket - ticketarg;
+        					if (amount < 0){
+        						sendMessage(sender,colorizeText("You don't have enough tickets to take a lottery ticket!",ChatColor.RED));
+        						return handled;
+        					}
+        					dbm.update("UPDATE players SET ticket=" + amount + " WHERE name = '" + name + "'");
+        					Random generator = new Random();
+        					int random = generator.nextInt(TConfig.chance);
+        					if (random == lotteryticket){
+        						Material item = Material.getMaterial(TConfig.lotteryitem);
+        						ItemStack itemstack = new ItemStack(item,1);
+        						((Player)sender).getInventory().addItem(itemstack);
+        						sendMessage(sender,colorizeText("You just won a " + item.toString() +"!",ChatColor.GREEN));
+        					}else{
+        						sendMessage(sender,colorizeText("You don't have a winning ticket.",ChatColor.RED));
+        					}
+        				}
         			}
         		//We check if we want to look at semeone else ticket
         		}else{
