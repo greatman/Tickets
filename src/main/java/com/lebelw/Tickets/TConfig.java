@@ -94,7 +94,7 @@ public class TConfig {
     	write("Database.password", "");
     	write("Database.database", "tickets");
     	write("Database.convert", false);
-    	write("Ticket.cost","10");
+    	write("Ticket.cost",10);
     	write("Lottery.chance",1000);
     	write("Lottery.itemid",354);
      loadkeys();

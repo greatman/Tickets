@@ -283,8 +283,8 @@ public class TemplateCmd implements CommandExecutor {
         				if (args[1] != null && TTools.isInt(args[1])){
         					int lotteryticket = Integer.parseInt(args[1]);
         					if (lotteryticket > TConfig.chance){
-        						int numberchance = TConfig.chance - 1;
-        						sendMessage(sender,colorizeText("You must choose a number from ",ChatColor.RED) + "0" + colorizeText(" to ",ChatColor.RED) + numberchance);
+        						
+        						sendMessage(sender,colorizeText("You must choose a number from ",ChatColor.RED) + "0" + colorizeText(" to ",ChatColor.RED) + TConfig.chance);
         						return handled;
         					}
         					String name = ((Player)sender).getName();
@@ -297,7 +297,7 @@ public class TemplateCmd implements CommandExecutor {
         					}
         					dbm.update("UPDATE players SET ticket=" + amount + " WHERE name = '" + name + "'");
         					Random generator = new Random();
-        					int random = generator.nextInt(TConfig.chance);
+        					int random = generator.nextInt(TConfig.chance + 1);
         					if (random == lotteryticket){
         						Material item = Material.getMaterial(TConfig.lotteryitem);
         						ItemStack itemstack = new ItemStack(item,1);
