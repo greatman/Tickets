@@ -361,15 +361,6 @@ public class TemplateCmd implements CommandExecutor {
         return sent;
     }
 
-    private boolean sendLog(CommandSender sender, String message) {
-        boolean sent = false;
-        if (!isPlayer(sender)) {
-            TLogger.info(message);
-            sent = true;
-        }
-        return sent;
-    }
-
     // Checks if the current user is actually a player and returns the name of that player.
     private String getName(CommandSender sender) {
         String name = "";
