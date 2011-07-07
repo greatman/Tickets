@@ -285,6 +285,7 @@ public class TemplateCmd implements CommandExecutor {
         					if (lotteryticket > TConfig.chance){
         						int numberchance = TConfig.chance - 1;
         						sendMessage(sender,colorizeText("You must choose a number from",ChatColor.RED) + "0" + colorizeText(" to ",ChatColor.RED) + numberchance);
+        						return handled;
         					}
         					String name = ((Player)sender).getName();
         					currentticket = getPlayerTicket(name);
