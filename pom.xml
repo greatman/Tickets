@@ -87,6 +87,7 @@
 					<include>plugin.yml</include>
 				</includes>
 			</resource>
+		</resources>
 	</build>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
