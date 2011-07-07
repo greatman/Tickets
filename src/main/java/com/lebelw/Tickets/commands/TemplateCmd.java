@@ -284,13 +284,13 @@ public class TemplateCmd implements CommandExecutor {
         					int lotteryticket = Integer.parseInt(args[1]);
         					if (lotteryticket > TConfig.chance){
         						int numberchance = TConfig.chance - 1;
-        						sendMessage(sender,colorizeText("You must choose a number from",ChatColor.RED) + "0" + colorizeText(" to ",ChatColor.RED) + numberchance);
+        						sendMessage(sender,colorizeText("You must choose a number from ",ChatColor.RED) + "0" + colorizeText(" to ",ChatColor.RED) + numberchance);
         						return handled;
         					}
         					String name = ((Player)sender).getName();
         					currentticket = getPlayerTicket(name);
         					
-        					amount = currentticket - ticketarg;
+        					amount = currentticket - 1;
         					if (amount < 0){
         						sendMessage(sender,colorizeText("You don't have enough tickets to take a lottery ticket!",ChatColor.RED));
         						return handled;
