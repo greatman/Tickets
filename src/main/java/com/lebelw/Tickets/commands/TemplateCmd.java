@@ -121,7 +121,7 @@ public class TemplateCmd implements CommandExecutor {
                 							return handled;
                 						}
                 						if (givePlayerTicket(name,ticketarg)){
-                							dbm.update("UPDATE players SET ticket=" + amount + " WHERE name = '" + name + "'");
+                							removePlayerTicket(sendername,ticketarg)
                 							sendMessage(sender,colorizeText(args[2] +" ticket(s) has been given to "+ name,ChatColor.GREEN));
                         					if (target.getName() != null){
                         						sendMessage(target,colorizeText("You received "+ ticketarg +" ticket(s) from "+ ((Player)sender).getName() + ".",ChatColor.GREEN));
@@ -254,6 +254,7 @@ public class TemplateCmd implements CommandExecutor {
                     						sendMessage(sender,colorizeText("You can't remove ",ChatColor.RED) + ticketarg + colorizeText(" ticket(s)! This player only have ",ChatColor.RED) + currentticket + colorizeText(" ticket(s)!",ChatColor.RED));
                     						return handled;
                     					}
+                    					removePlayerTicket(name,ticketarg);
                     					dbm.update("UPDATE players SET ticket=" + amount + " WHERE name = '" + name + "'");
                     					sendMessage(sender,colorizeText(args[2] +" ticket(s) has been removed from "+ name,ChatColor.GREEN));
 	                					if (target.getName() != null){
@@ -298,7 +299,7 @@ public class TemplateCmd implements CommandExecutor {
         						sendMessage(sender,colorizeText("You don't have enough tickets to take a lottery ticket!",ChatColor.RED));
         						return handled;
         					}
-        					dbm.update("UPDATE players SET ticket=" + amount + " WHERE name = '" + name + "'");
+        					removePlayerTicket(name,1);
         					Random generator = new Random();
         					int random = generator.nextInt(TConfig.chance + 1);
         					if (random == lotteryticket){
@@ -396,7 +397,6 @@ public class TemplateCmd implements CommandExecutor {
 				return true;
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			TLogger.warning(e.getMessage());
 			return false;
 		}
@@ -416,7 +416,6 @@ public class TemplateCmd implements CommandExecutor {
     				return result.getInt("Ticket");
     			}
     		} catch (SQLException e) {
-    			// TODO Auto-generated catch block
     			TLogger.warning(e.getMessage());
     			return 0;
     		}
@@ -440,6 +439,14 @@ public class TemplateCmd implements CommandExecutor {
     	}else{
     		return false;
     	}
+    }
+    private boolean removePlayerTicket(String name, Integer amount){
+    	if (checkIfPlayerExists(name)){
+    		currentticket = getPlayerTicket(name);
+			amount = currentticket - amount;
+			return dbm.update("UPDATE players SET ticket=" + amount + " WHERE name = '" + name + "'");
+    	}else
+    		return false;
     }
     private boolean givePlayerTicket(String name, Integer amount){
     	if (checkIfPlayerExists(name)){
