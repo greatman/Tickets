@@ -1,11 +1,14 @@
 package com.lebelw.Tickets;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandException;
@@ -19,6 +22,7 @@ import org.bukkit.event.Event;
 
 import com.lebelw.Tickets.commands.TemplateCmd;
 import com.lebelw.Tickets.extras.CommandManager;
+import com.lebelw.Tickets.extras.DataManager;
 
 import com.iConomy.*;
 import cosine.boseconomy.*;
@@ -28,9 +32,11 @@ public class Tickets extends JavaPlugin {
 	public static String name;
     public static String version;
 	private final TServerListener serverListener = new TServerListener(this);
+	private final TPlayerListener playerListener = new TPlayerListener(this);
 	private final CommandManager commandManager = new CommandManager(this);
 	public iConomy iConomy = null;
 	public BOSEconomy BOSEconomy = null;
+	public static DataManager dbm;
 	public void onEnable() {
 		name = this.getDescription().getName();
 		version = this.getDescription().getVersion();
@@ -38,6 +44,7 @@ public class Tickets extends JavaPlugin {
         // Makes sure all plugins are correctly loaded.
         pm.registerEvent(Event.Type.PLUGIN_ENABLE, serverListener, Priority.Monitor, this);
         pm.registerEvent(Event.Type.PLUGIN_DISABLE, serverListener, Priority.Monitor, this);
+        pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Monitor, this);
 		TLogger.initialize(Logger.getLogger("Minecraft"));
 		TConfig TConfig = new TConfig(this);
 		TConfig.configCheck();
@@ -45,7 +52,7 @@ public class Tickets extends JavaPlugin {
 		TPermissions.initialize(this);
 		TLogger.info("Enabled");
 		
-		
+		dbm = TDatabase.dbm;
 		//Let's setup commands
 		addCommand("ticket", new TemplateCmd(this));
 	}
@@ -241,6 +248,7 @@ public class Tickets extends JavaPlugin {
     */
     public Player matchSinglePlayer(CommandSender sender, String filter)
             throws CommandException {
+    	//TODO:Add player database checkup
         // This will throw an exception if there are no matches
         Iterator<Player> players = matchPlayers(sender, filter).iterator();
         
@@ -255,5 +263,138 @@ public class Tickets extends JavaPlugin {
         }
         
         return match;
+    }
+    // Checks if the current user is actually a player and returns the name of that player.
+    public String getName(CommandSender sender) {
+        String name = "";
+        if (isPlayer(sender)) {
+            Player player = (Player) sender;
+            name = player.getName();
+        }
+        return name;
+    }
+
+    // Gets the player if the current user is actually a player.
+    public Player getPlayer(CommandSender sender) {
+        Player player = null;
+        if (isPlayer(sender)) {
+            player = (Player) sender;
+        }
+        return player;
+    }
+
+    public String colorizeText(String text, ChatColor color) {
+        return color + text + ChatColor.WHITE;
+    }
+    /*
+     * Checks if a player account exists
+     * 
+     * @param name    The full name of the player.
+     */
+    public boolean checkIfPlayerExists(String name)
+    {
+    	ResultSet result = dbm.query("SELECT id FROM players WHERE name = '" + name + "'");
+		try {
+			if (result != null  && result.next()){
+				return true;
+			}else
+				throw new CommandException("You do not have a ticket account! Please reconnect.");
+		} catch (SQLException e) {
+			TLogger.warning(e.getMessage());
+			return false;
+		}
+    }
+    /*
+     * Get the amount of tickets a player have
+     * 
+     * @param name    The full name of the player.
+     */
+    public ResultSet getPlayerTicket(String name){
+    	if (checkIfPlayerExists(name)){
+    		int id = getPlayerId(name);
+    		if (id < 0)
+    			return null;
+    		ResultSet result = dbm.query("SELECT business.name, tickets.tickets FROM tickets LEFT JOIN business ON (tickets.business_id = business.id) WHERE user_id= '" + id + "'");
+    			return result;
+    	}else
+    		return null;
+    }
+    public int getBusinessPlayerTicket(String name, String business){
+    	if (checkIfPlayerExists(name)){
+    		int id = getPlayerId(name);
+    		if (id < 0)
+    			throw new CommandException("No tickets account found under your name. Please reconnect.");
+    		int idbusiness = TBusiness.getBusinessId(business);
+    		if (id < 0)
+    			throw new CommandException("No business found!");
+    		ResultSet result = dbm.query("SELECT tickets FROM tickets WHERE user_id="+ id +" AND business_id="+ idbusiness +"");
+    		try {
+    			if (result != null  && result.next()){
+    				return result.getInt("tickets");
+    			}else
+    				return 0;
+    		} catch (SQLException e) {
+    			TLogger.warning(e.getMessage());
+    		}
+    	}
+    	return -1;
+    }
+    /*
+     * Create a player ticket account
+     * 
+     * @param name    The full name of the player.
+     */
+    public boolean createPlayerTicketAccount(String name){
+    	if (!checkIfPlayerExists(name)){
+    		if(dbm.insert("INSERT INTO players(name) VALUES('" + name + "')")){
+    			return true;
+    		}else{
+    			throw new CommandException("Error while adding " + name + " ticket account.");
+    		}
+    	}else
+    		throw new CommandException("Account already exists!");
+    }
+    public boolean removePlayerTicket(String name, Integer amount,String businessname){
+    	int currentticket;
+    	if (checkIfPlayerExists(name)){
+    		currentticket = getBusinessPlayerTicket(name,businessname);
+    		int businessid = TBusiness.getBusinessId(businessname);
+    		if (businessid > 0){
+    			amount = currentticket - amount;
+    			if (amount < 0)
+    				throw new CommandException("You can't remove "+ amount +" ticket from " + name + " ticket account! He only haves" + currentticket + "");
+    			return dbm.update("UPDATE tickets SET tickets=" + amount + ", business_id="+ businessid +" WHERE user_id = '" + name + "'");
+    		}
+    	}
+    	return false;
+    }
+    public boolean givePlayerTicket(String name, Integer amount,String businessname){
+    	int currentticket;
+    	if (checkIfPlayerExists(name)){
+    		currentticket = getBusinessPlayerTicket(name,businessname);
+    		int businessid = TBusiness.getBusinessId(businessname);
+    		if (businessid > 0){
+    			amount = currentticket + amount;
+    			return dbm.update("UPDATE tickets SET tickets=" + amount + ", business_id="+ businessid +"  WHERE user_id = '" + name + "'");
+    		}
+    	}
+    	return false;
+    }
+    public int getPlayerId(String name){
+    	if (!checkIfPlayerExists(name))
+    		return -1;
+    	ResultSet result = dbm.query("SELECT id FROM players WHERE name = '" + name + "'");
+    	try {
+			if (result != null  && result.next()){
+				return result.getInt("id");
+			}
+		} catch (SQLException e) {
+			TLogger.warning(e.getMessage());
+		}
+    	return -2;
+    	
+    }
+    public boolean isPlayer(CommandSender sender) {
+        return sender != null && sender instanceof Player;
     }
 }
