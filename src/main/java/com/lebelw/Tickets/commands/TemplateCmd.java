@@ -54,10 +54,9 @@ public class TemplateCmd implements CommandExecutor {
 	        					while(result.next()){
 									sendMessage(sender,plugin.colorizeText(result.getString("name") + ": ",ChatColor.YELLOW) + result.getInt("tickets"));
 								}
-	        				}
-	        				else
-	        					sendMessage(sender,plugin.colorizeText("You have 0 ticket",ChatColor.RED));
-	        					sendMessage(sender,plugin.colorizeText("/ticket help for help",ChatColor.YELLOW));
+	        				}else
+	        					sendMessage(sender,plugin.colorizeText("You got no tickets!",ChatColor.YELLOW));
+	        				sendMessage(sender,plugin.colorizeText("/ticket help for help",ChatColor.YELLOW));
 		        		} catch (SQLException se) {
 							TLogger.error(se.getMessage());
 		                }
