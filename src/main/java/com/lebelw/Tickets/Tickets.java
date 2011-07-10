@@ -364,7 +364,7 @@ public class Tickets extends JavaPlugin {
     			amount = currentticket - amount;
     			if (amount < 0)
     				throw new CommandException("You can't remove "+ amount +" ticket from " + name + " ticket account! He only haves" + currentticket + "");
-    			return dbm.update("UPDATE tickets SET tickets=" + amount + ", business_id="+ businessid +" WHERE user_id = '" + userid + "'");
+    			return dbm.update("UPDATE tickets SET tickets=" + amount + " WHERE user_id = '" + userid + "' AND business_id="+ businessid);
     		}
     	}
     	return false;
@@ -377,7 +377,7 @@ public class Tickets extends JavaPlugin {
     		int businessid = TBusiness.getBusinessId(businessname);
     		if (businessid > 0){
     			amount = currentticket + amount;
-    			return dbm.update("UPDATE tickets SET tickets=" + amount + ", business_id="+ businessid +"  WHERE user_id = '" + userid + "'");
+    			return dbm.update("UPDATE tickets SET tickets=" + amount + " WHERE user_id = '" + userid + "' AND business_id="+ businessid);
     		}
     	}
     	return false;
