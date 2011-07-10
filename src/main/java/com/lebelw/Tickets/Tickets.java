@@ -359,11 +359,12 @@ public class Tickets extends JavaPlugin {
     	if (checkIfPlayerExists(name)){
     		currentticket = getBusinessPlayerTicket(name,businessname);
     		int businessid = TBusiness.getBusinessId(businessname);
+    		int userid = getPlayerId(name);
     		if (businessid > 0){
     			amount = currentticket - amount;
     			if (amount < 0)
     				throw new CommandException("You can't remove "+ amount +" ticket from " + name + " ticket account! He only haves" + currentticket + "");
-    			return dbm.update("UPDATE tickets SET tickets=" + amount + ", business_id="+ businessid +" WHERE user_id = '" + name + "'");
+    			return dbm.update("UPDATE tickets SET tickets=" + amount + ", business_id="+ businessid +" WHERE user_id = '" + userid + "'");
     		}
     	}
     	return false;
