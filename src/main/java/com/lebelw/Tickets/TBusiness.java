@@ -29,7 +29,7 @@ public class TBusiness {
 		
 	}
 	public static int getBusinessId(String name){
-		ResultSet result = Tickets.dbm.query("SELECT id FROM business WHERE name LIKE = '%" + name + "%'");
+		ResultSet result = Tickets.dbm.query("SELECT id FROM business WHERE name LIKE '%" + name + "%'");
     	try {
 			if (result != null  && result.next()){
 				return result.getInt("id");
