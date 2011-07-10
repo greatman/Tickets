@@ -49,9 +49,11 @@ public class TemplateCmd implements CommandExecutor {
 	        		if (isPlayer(sender)){
 	        			String name = plugin.getName(sender);
 	        			try{
-	        				ResultSet result = dbm.query("SELECT ticket FROM players WHERE name='" + name + "'");
-	        				if (result != null && result.next()){
-	        					sendMessage(sender,plugin.colorizeText("You have ",ChatColor.GREEN) + result.getInt("ticket") + plugin.colorizeText(" ticket(s).",ChatColor.GREEN));
+	        				ResultSet result = plugin.getPlayerTicket(name);
+	        				if (result != null){
+	        					while(result.next()){
+									sendMessage(sender,plugin.colorizeText(result.getString("name") + ": ",ChatColor.YELLOW) + result.getInt("tickets"));
+								}
 	        				}
 	        				else
 	        					sendMessage(sender,plugin.colorizeText("You have 0 ticket",ChatColor.RED));
