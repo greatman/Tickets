@@ -372,10 +372,11 @@ public class Tickets extends JavaPlugin {
     	int currentticket;
     	if (checkIfPlayerExists(name)){
     		currentticket = getBusinessPlayerTicket(name,businessname);
+    		int userid = getPlayerId(name);
     		int businessid = TBusiness.getBusinessId(businessname);
     		if (businessid > 0){
     			amount = currentticket + amount;
-    			return dbm.update("UPDATE tickets SET tickets=" + amount + ", business_id="+ businessid +"  WHERE user_id = '" + name + "'");
+    			return dbm.update("UPDATE tickets SET tickets=" + amount + ", business_id="+ businessid +"  WHERE user_id = '" + userid + "'");
     		}
     	}
     	return false;
