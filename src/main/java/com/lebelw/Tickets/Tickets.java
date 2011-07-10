@@ -258,8 +258,7 @@ public class Tickets extends JavaPlugin {
         // players were found (we don't want to just pick off the first one,
         // as that may be the wrong player)
         if (players.hasNext()) {
-            throw new CommandException("More than one player found! " +
-             "Use @<name> for exact matching.");
+            throw new CommandException("More than one player found!");
         }
         
         return match;
@@ -361,10 +360,10 @@ public class Tickets extends JavaPlugin {
     		int businessid = TBusiness.getBusinessId(businessname);
     		int userid = getPlayerId(name);
     		if (businessid > 0){
-    			amount = currentticket - amount;
+    			int amount2 = currentticket - amount;
     			if (amount < 0)
-    				throw new CommandException("You can't remove "+ amount +" ticket from " + name + " ticket account! He only haves" + currentticket + "");
-    			return dbm.update("UPDATE tickets SET tickets=" + amount + " WHERE user_id = '" + userid + "' AND business_id="+ businessid);
+    				throw new CommandException("You can't remove "+ amount +" ticket from " + name + " ticket account! He only haves " + currentticket + "");
+    			return dbm.update("UPDATE tickets SET tickets=" + amount2 + " WHERE user_id = '" + userid + "' AND business_id="+ businessid);
     		}
     	}
     	return false;
