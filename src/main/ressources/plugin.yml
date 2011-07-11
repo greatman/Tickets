@@ -5,3 +5,6 @@ commands:
     ticket:
         description: Take care of the tickets
         usage: /ticket
+    business:
+        description: Take care of the business support
+        usage: /business

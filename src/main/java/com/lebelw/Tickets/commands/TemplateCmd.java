@@ -5,7 +5,6 @@ import java.sql.SQLException;
 import java.util.Random;
 
 import com.lebelw.Tickets.TBusiness;
-import com.lebelw.Tickets.TConfig;
 import com.lebelw.Tickets.TDatabase;
 import com.lebelw.Tickets.TLogger;
 import com.lebelw.Tickets.TMoney;
@@ -32,7 +31,8 @@ public class TemplateCmd implements CommandExecutor {
     private final Tickets plugin;
     DataManager dbm = TDatabase.dbm;
     Player target;
-    int currentticket, ticketarg, amount;
+    int currentticket , ticketarg, amount;
+    String businessname,businessowner;
     TMoney TMoney;
     
     public TemplateCmd(Tickets instance) {
@@ -43,7 +43,9 @@ public class TemplateCmd implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         boolean handled = false;
         try{
+        	// /ticket command
         	if (is(label, "ticket")) {
+        		//No arguments? We show the tickets the guy have!
 	        	if (args == null || args.length == 0) {
 	        		handled = true;
 	        		if (isPlayer(sender)){
@@ -347,6 +349,59 @@ public class TemplateCmd implements CommandExecutor {
 	        			}
 	        			
 	        		}
+	        	}
+	        // /business command
+	        }else if(is(label,"business")){
+	        	if (is(args[0],"help")){
+	        		handled = true;
+	        		if (isPlayer(sender) && TPermissions.permission(plugin.getPlayer(sender), "ticket.business.add", plugin.getPlayer(sender).isOp())){
+            			sendMessage(sender,plugin.colorizeText("/business add <Name> <Owner> (Lottery) (Lottery Chance) (Lottery Item)",ChatColor.YELLOW) + "- Create a business. (Optional)");
+            		}
+	        	}
+	        	//Is the subcommand add?
+	        	if (is(args[0],"add")){
+	        		handled = true;
+	        		int lottery = 0,lotterychance = 0,lotteryitem = 0;
+        			if (isPlayer(sender) && TPermissions.permission(plugin.getPlayer(sender), "ticket.business.add", plugin.getPlayer(sender).isOp())){
+        				if (args.length == 1 || args.length == 2 || args.length == 3){
+        					sendMessage(sender,plugin.colorizeText("/business add <Name> <Owner> (Lottery) (Lottery Chance) (Lottery Item)",ChatColor.YELLOW) + "- Create a business. (Optional)");
+        					return handled;
+        				}
+        				//We check if we put the Lottery activated argument
+        				if (args.length == 4){
+        					if (TTools.isInt(args[3]))
+        						lottery = Integer.parseInt(args[3]);
+        				}
+        				if (args.length == 5){
+        					if (TTools.isInt(args[4]))
+        						lotterychance = Integer.parseInt(args[4]);
+        				}
+        				if (args.length == 6){
+        					if (TTools.isInt(args[5]))
+        						lotteryitem = Integer.parseInt(args[5]);
+        				}
+        				if (!TTools.isInt(args[1])){
+        					if (TTools.isInt(args[2])){
+        						//set friendly variables
+        						businessname = args[1];
+        						businessowner = args[2];
+        						try {
+                					target = plugin.matchSinglePlayer(sender, businessowner);
+                					if (target.getName() != null){
+                    					businessowner = target.getName();
+                    				}
+                				}catch (CommandException error){
+                					sendMessage(sender,plugin.colorizeText(error.getMessage(),ChatColor.RED));
+                					return handled;
+                				}
+	        					TBusiness.addBusiness(businessname,businessowner,lottery,lotterychance,lotteryitem);
+        						sendMessage(sender,plugin.colorizeText("Business "+ businessname + " added!",ChatColor.RED));
+        					}else
+	            				sendMessage(sender,plugin.colorizeText("String received for the second parameter. Expecting integer.",ChatColor.RED));
+        						
+        				}else
+            				sendMessage(sender,plugin.colorizeText("Integer received for the first parameter. Expecting string.",ChatColor.RED));
+        			}
 	        	}
 	        	
 	        }

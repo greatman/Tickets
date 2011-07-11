@@ -11,20 +11,20 @@ public class TBusiness {
 	public TBusiness(Tickets tickets) {
 		plugin = tickets;
 	}
-	public boolean addBusiness(String name,String owner,String ticketname) {
+	public static boolean addBusiness(String name,String owner,int lottery,int lotterychance,int lotteryitem) {
 		if (name == null && owner == null)
 			return false;
 		if (!plugin.checkIfPlayerExists(name))
 			plugin.createPlayerTicketAccount(name);
 		int playerid = plugin.getPlayerId(name);
 		if (playerid > -1){
-			String query = "INSERT INTO business(name,owner_id,ticketname) VALUES('"+ name +"','"+ playerid +"','"+ ticketname +"')";
+			String query = "INSERT INTO business(name,owner_id,lottery,lotterychance,lotteryitem) VALUES('"+ name +"','"+ playerid +"','"+ lottery +"',"+lotterychance+","+lotteryitem+")";
 			if (Tickets.dbm.insert(query))
 				return true;
 			else
-				return false;
+				throw new CommandException("A error occured");
 		}else{
-			return false;
+			throw new CommandException("This user doesn't exist in the database. Should not see this.");
 		}
 		
 	}
