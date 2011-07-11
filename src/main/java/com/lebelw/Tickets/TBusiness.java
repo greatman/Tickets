@@ -32,7 +32,10 @@ public class TBusiness {
 		ResultSet result = Tickets.dbm.query("SELECT id FROM business WHERE name LIKE '%" + name + "%'");
     	try {
 			if (result != null  && result.next()){
-				return result.getInt("id");
+				if (result.isLast())
+					return result.getInt("id");
+				else
+					throw new CommandException("More than 1 business found! Please type more characters");
 			}else
 				throw new CommandException("No business found!");
 		} catch (SQLException e) {
@@ -45,5 +48,69 @@ public class TBusiness {
 		if (result != null)		
 			return result;
 		return null;
+	}
+	public static int isLotteryBusiness(String name){
+		ResultSet result = Tickets.dbm.query("SELECT lottery FROM business WHERE name LIKE '%" + name + "%'");
+    	try {
+			if (result != null  && result.next()){
+				if (result.isLast())
+					if (result.getInt("lottery") == 1)
+						return 1;
+					else
+						throw new CommandException("You can't use this business for lottery!");
+				else
+					throw new CommandException("More than 1 business found! Please type more characters");
+			}else
+				throw new CommandException("No business found!");
+		} catch (SQLException e) {
+			TLogger.warning(e.getMessage());
+	    	return -1;
+		}
+
+	}
+	public static int getBusinessLotteryChance(String name) {
+		ResultSet result = Tickets.dbm.query("SELECT lotterychance FROM business WHERE name LIKE '%" + name + "%'");
+    	try {
+			if (result != null  && result.next()){
+				if (result.isLast())
+					return result.getInt("lotterychance");
+				else
+					throw new CommandException("More than 1 business found! Please type more characters");
+			}else
+				throw new CommandException("No business found!");
+		} catch (SQLException e) {
+			TLogger.warning(e.getMessage());
+	    	return -1;
+		}
+	}
+	public static int getBusinessLotteryItem(String name){
+		ResultSet result = Tickets.dbm.query("SELECT lotteryitem FROM business WHERE name LIKE '%" + name + "%'");
+    	try {
+			if (result != null  && result.next()){
+				if (result.isLast())
+					return result.getInt("lotteryitem");
+				else
+					throw new CommandException("More than 1 business found! Please type more characters");
+			}else
+				throw new CommandException("No business found!");
+		} catch (SQLException e) {
+			TLogger.warning(e.getMessage());
+	    	return -1;
+		}
+	}
+	public static int getBusinessLotteryCost(String name){
+		ResultSet result = Tickets.dbm.query("SELECT lotterycost FROM business WHERE name LIKE '%" + name + "%'");
+    	try {
+			if (result != null  && result.next()){
+				if (result.isLast())
+					return result.getInt("lotterycost");
+				else
+					throw new CommandException("More than 1 business found! Please type more characters");
+			}else
+				throw new CommandException("No business found!");
+		} catch (SQLException e) {
+			TLogger.warning(e.getMessage());
+	    	return -1;
+		}
 	}
 }

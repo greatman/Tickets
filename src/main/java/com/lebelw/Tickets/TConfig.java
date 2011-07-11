@@ -16,9 +16,7 @@ public class TConfig {
     public static String password;
     public static String database;
     public static double cost;
-    public static int chance;
     public static boolean convert;
-    public static int lotteryitem;
     public TConfig(Tickets instance) {
         
     }
@@ -95,8 +93,6 @@ public class TConfig {
     	write("Database.database", "tickets");
     	write("Database.convert", false);
     	write("Ticket.cost",10);
-    	write("Lottery.chance",1000);
-    	write("Lottery.itemid",354);
      loadkeys();
     }
     private void loadkeys(){
@@ -108,7 +104,5 @@ public class TConfig {
         database = readString("Database.database");
         convert = readBoolean("Database.convert");
         cost = readDouble("Ticket.cost");
-        chance = readInteger("Lottery.chance", 1000);
-        lotteryitem = readInteger("Lottery.itemid",354);
         }
 }

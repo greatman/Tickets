@@ -48,20 +48,12 @@ public class TemplateCmd implements CommandExecutor {
 	        		handled = true;
 	        		if (isPlayer(sender)){
 	        			String name = plugin.getName(sender);
-	        			try{
 	        				ResultSet result = plugin.getPlayerTicket(name);
 	        				if (result != null){
-	        					while(result.next()){
-									sendMessage(sender,plugin.colorizeText(result.getString("name") + ": ",ChatColor.YELLOW) + result.getInt("tickets"));
-								}
+	        					listPlayerTicket(sender,result);
 	        				}else
 	        					sendMessage(sender,plugin.colorizeText("You got no tickets!",ChatColor.YELLOW));
 	        				sendMessage(sender,plugin.colorizeText("/ticket help for help",ChatColor.YELLOW));
-		        		} catch (SQLException se) {
-							TLogger.error(se.getMessage());
-		                }
-	        		
-	        		
 	        		}
 	        	}
 	        	else {
@@ -284,41 +276,54 @@ public class TemplateCmd implements CommandExecutor {
 	        			else{
 	        				sendMessage(sender,plugin.colorizeText("Permission denied.",ChatColor.RED));
 	        			}
-	        		/*}else if (is(args[0],"lottery")){
+	        		}else if (is(args[0],"lottery")){
 	        			handled = true;
 	        			if (isPlayer(sender) && TPermissions.permission(plugin.getPlayer(sender), "ticket.lottery", plugin.getPlayer(sender).isOp())){
-	        				if (args.length == 1){
-	        					sendMessage(sender,plugin.colorizeText("/ticket lottery <Number>",ChatColor.YELLOW));
+	        				if (args.length == 1 || args.length == 2){
+	        					sendMessage(sender,plugin.colorizeText("/ticket lottery <Number> <Business>",ChatColor.YELLOW) + "- Play Lottery and win a item!");
 	        					return handled;
 	        				}
-	        				if (args[1] != null && TTools.isInt(args[1])){
-	        					int lotteryticket = Integer.parseInt(args[1]);
-	        					if (lotteryticket > TConfig.chance){
-	        						
-	        						sendMessage(sender,plugin.colorizeText("You must choose a number from ",ChatColor.RED) + "0" + plugin.colorizeText(" to ",ChatColor.RED) + TConfig.chance);
-	        						return handled;
+	        				//Do we have a number for the lottery?
+	        				if (TTools.isInt(args[1])){
+	        					//Do we have the business name?
+	        					if (!TTools.isInt(args[2])){
+	        						//we set the arguments to friendly variables
+	        						int lotteryticket = Integer.parseInt(args[1]);
+	        						String businessname = args[2];
+	        						//We check if this business is a lottery one
+	        						TBusiness.isLotteryBusiness(businessname);
+	        						//We grab the lottery chance for this business
+	        						int businesschance = TBusiness.getBusinessLotteryChance(businessname);
+	        						//Did we select a number higher than the chance?
+		        					if (lotteryticket > businesschance){
+		        						sendMessage(sender,plugin.colorizeText("You must choose a number from ",ChatColor.RED) + "0" + plugin.colorizeText(" to ",ChatColor.RED) + businesschance);
+		        						return handled;
+		        					}
+		        					//We grab the player name and remove 1 ticket
+		        					String name = ((Player)sender).getName();
+		        					plugin.removePlayerTicket(name,TBusiness.getBusinessLotteryCost(businessname),businessname);
+		        					//Starts the generator
+		        					Random generator = new Random();
+		        					//We generate a number
+		        					int random = generator.nextInt(businesschance + 1);
+		        					//Did the guy win?
+		        					if (random == lotteryticket){
+		        						//We grab the item and we give it to the winner
+		        						int businesslotteryitem = TBusiness.getBusinessLotteryItem(businessname);
+		        						Material item = Material.getMaterial(businesslotteryitem);
+		        						ItemStack itemstack = new ItemStack(item,1);
+		        						((Player)sender).getInventory().addItem(itemstack);
+		        						sendMessage(sender,plugin.colorizeText("You just won a " + item.toString() +"!",ChatColor.GREEN));
+		        					}else{
+		        						sendMessage(sender,plugin.colorizeText("You do not have a winning ticket.",ChatColor.RED));
+		        					}
 	        					}
-	        					String name = ((Player)sender).getName();
-	        					currentticket = plugin.getPlayerTicket(name);
+	            				else
+	                				sendMessage(sender,plugin.colorizeText("Integer received for the first parameter. Expecting string.",ChatColor.RED));
+	            			}else
+	            				sendMessage(sender,plugin.colorizeText("String received for the second parameter. Expecting integer.",ChatColor.RED));
 	        					
-	        					amount = currentticket - 1;
-	        					if (amount < 0){
-	        						sendMessage(sender,plugin.colorizeText("You don't have enough tickets to take a lottery ticket!",ChatColor.RED));
-	        						return handled;
-	        					}
-	        					plugin.removePlayerTicket(name,1);
-	        					Random generator = new Random();
-	        					int random = generator.nextInt(TConfig.chance + 1);
-	        					if (random == lotteryticket){
-	        						Material item = Material.getMaterial(TConfig.lotteryitem);
-	        						ItemStack itemstack = new ItemStack(item,1);
-	        						((Player)sender).getInventory().addItem(itemstack);
-	        						sendMessage(sender,plugin.colorizeText("You just won a " + item.toString() +"!",ChatColor.GREEN));
-	        					}else{
-	        						sendMessage(sender,plugin.colorizeText("You don't have a winning ticket.",ChatColor.RED));
-	        					}
-	        				}
-	        			}*/
+	        			}
 	        		//We check if we want to look at semeone else ticket
 	        		}else{
 	        			handled = true;
@@ -329,14 +334,11 @@ public class TemplateCmd implements CommandExecutor {
 	            					name = target.getName();
 	            				}
 	        				sendMessage(sender,plugin.colorizeText(name + " currently have:",ChatColor.GREEN));
-	        				ResultSet ticketamount = plugin.getPlayerTicket(name);
-	        				try {
-								while(ticketamount.next()){
-									sendMessage(sender,plugin.colorizeText(ticketamount.getString("name") + ": ",ChatColor.YELLOW) + ticketamount.getInt("tickets"));
-								}
-							} catch (SQLException e) {
-								TLogger.warning(e.getMessage());
-							}
+	        				ResultSet result = plugin.getPlayerTicket(name);
+	        				if (result != null){
+	        					listPlayerTicket(sender,result);
+	        				}else
+	        					sendMessage(sender,plugin.colorizeText("You got no tickets!",ChatColor.YELLOW));
 	        				
 	        					
 	        			}else{
@@ -374,5 +376,19 @@ public class TemplateCmd implements CommandExecutor {
             sent = true;
         }
         return sent;
+    }
+    private void listPlayerTicket(CommandSender sender, ResultSet result){
+    	String lottery = "";
+		try {
+			while(result.next()){
+				if (result.getBoolean("lottery")){
+					lottery = "(Lottery)";
+				}
+				sendMessage(sender,plugin.colorizeText(result.getString("name") + " "+ lottery +" : ",ChatColor.YELLOW) + result.getInt("tickets"));
+				lottery = "";
+			}
+		} catch (SQLException e) {
+			TLogger.warning(e.getMessage());
+		}
     }
 }
