@@ -290,18 +290,26 @@ public class Tickets extends JavaPlugin {
      * 
      * @param name    The full name of the player.
      */
-    public boolean checkIfPlayerExists(String name)
+    public boolean checkIfPlayerExists(String name,CommandSender sender)
     {
     	ResultSet result = dbm.query("SELECT id FROM players WHERE name = '" + name + "'");
 		try {
 			if (result != null  && result.next()){
 				return true;
-			}else
-				throw new CommandException("You do not have a ticket account! Please reconnect.");
+			}else{
+				if (sender == null)
+					throw new CommandException("He does not have a ticket account! Please ask him to reconnect.");
+				else
+					throw new CommandException("You do not have a ticket account! Please reconnect.");
+			}
+				
 		} catch (SQLException e) {
 			TLogger.warning(e.getMessage());
 			return false;
 		}
+    }
+    public boolean checkIfPlayerExists(String name) {
+    	return checkIfPlayerExists(name,null);
     }
     /*
      * Get the amount of tickets a player have
@@ -318,7 +326,8 @@ public class Tickets extends JavaPlugin {
     	}else
     		return null;
     }
-    public int getBusinessPlayerTicket(String name, String business){
+
+	public int getBusinessPlayerTicket(String name, String business){
     	if (checkIfPlayerExists(name)){
     		int id = getPlayerId(name);
     		if (id < 0)
@@ -353,25 +362,35 @@ public class Tickets extends JavaPlugin {
     	}else
     		throw new CommandException("Account already exists!");
     }
-    public boolean removePlayerTicket(String name, Integer amount,String businessname){
+    public boolean removePlayerTicket(String name, Integer amount,String businessname,CommandSender sender){
     	int currentticket;
     	if (checkIfPlayerExists(name)){
     		currentticket = getBusinessPlayerTicket(name,businessname);
+    		createPlayerBusinessTicketAccount(name,businessname);
     		int businessid = TBusiness.getBusinessId(businessname);
     		int userid = getPlayerId(name);
     		if (businessid > 0){
     			int amount2 = currentticket - amount;
-    			if (amount < 0)
-    				throw new CommandException("You can't remove "+ amount +" ticket from " + name + " ticket account! He only haves " + currentticket + "");
+    			if (amount < 0){
+    				if (sender != null)
+    					throw new CommandException("You can't remove "+ amount +" ticket! You only have " + currentticket + "");
+    				else
+    					throw new CommandException("You can't remove "+ amount +" ticket! He only haves " + currentticket + "");
+    			}
+    				
     			return dbm.update("UPDATE tickets SET tickets=" + amount2 + " WHERE user_id = '" + userid + "' AND business_id="+ businessid);
     		}
     	}
     	return false;
     }
+    public boolean removePlayerTicket(String name, Integer amount,String businessname){
+    	return removePlayerTicket(name,amount,businessname);
+    }
     public boolean givePlayerTicket(String name, Integer amount,String businessname){
     	int currentticket;
     	if (checkIfPlayerExists(name)){
     		currentticket = getBusinessPlayerTicket(name,businessname);
+    		createPlayerBusinessTicketAccount(name,businessname);
     		int userid = getPlayerId(name);
     		int businessid = TBusiness.getBusinessId(businessname);
     		if (businessid > 0){
@@ -394,6 +413,17 @@ public class Tickets extends JavaPlugin {
 		}
     	return -2;
     	
+    }
+    public boolean createPlayerBusinessTicketAccount(String name, String businessname){
+    	int businessid = TBusiness.getBusinessId(businessname);
+    	int playerid = getPlayerId(name);
+    	if (businessid == 0)
+    		return false;
+    	ResultSet result = dbm.query("SELECT tickets FROM tickets WHERE user_id = '" + playerid + "' AND business_id=" + businessid);
+			if (result == null){
+				return dbm.insert("INSERT INTO tickets(user_id,business_id,tickets) VALUES ("+playerid+","+businessid+",0)");
+			}else
+				return true;
     }
     public boolean isPlayer(CommandSender sender) {
         return sender != null && sender instanceof Player;

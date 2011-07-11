@@ -75,13 +75,13 @@ public class TemplateCmd implements CommandExecutor {
 	            			sendMessage(sender,plugin.colorizeText("/ticket <Name>",ChatColor.YELLOW) +" - See semeone's else ticket amount");
 	            		}
 	            		if (isPlayer(sender) && TPermissions.permission(plugin.getPlayer(sender), "ticket.give", plugin.getPlayer(sender).isOp())){
-	            			sendMessage(sender,plugin.colorizeText("/ticket give <Name> <Amount>",ChatColor.YELLOW) +" - Give ticket to semeone");
+	            			sendMessage(sender,plugin.colorizeText("/ticket give <Name> <Amount> <Business>",ChatColor.YELLOW) +" - Give ticket to semeone");
 	            		}
 	            		if (isPlayer(sender) && TPermissions.permission(plugin.getPlayer(sender), "ticket.take", plugin.getPlayer(sender).isOp())){
-	            			sendMessage(sender,plugin.colorizeText("/ticket take <Name> <Amount>",ChatColor.YELLOW) +" - Take ticket to semeone");
+	            			sendMessage(sender,plugin.colorizeText("/ticket take <Name> <Amount> <Business>",ChatColor.YELLOW) +" - Take ticket to semeone");
 	            		}	
 	            		if (isPlayer(sender) && TPermissions.permission(plugin.getPlayer(sender), "ticket.send", plugin.getPlayer(sender).isOp())){
-	            			sendMessage(sender,plugin.colorizeText("/ticket send <Name> <Amount>",ChatColor.YELLOW) +" - Send ticket to semeone");
+	            			sendMessage(sender,plugin.colorizeText("/ticket send <Name> <Amount> <Business>",ChatColor.YELLOW) +" - Send ticket to semeone");
 	            		}
 	            		if (isPlayer(sender) && TPermissions.permission(plugin.getPlayer(sender), "ticket.buy", plugin.getPlayer(sender).isOp())){
 	            			sendMessage(sender,plugin.colorizeText("/ticket buy <Amount>",ChatColor.YELLOW) +" - Buy tickets with money.");
@@ -91,73 +91,73 @@ public class TemplateCmd implements CommandExecutor {
 	            		}
 	            		
 	        		}
-	        		/*else if (is(args[0],"send")){
+	        		else if (is(args[0],"send")){
 	        			handled = true;
 	        			if (isPlayer(sender) && TPermissions.permission(plugin.getPlayer(sender), "ticket.send", plugin.getPlayer(sender).isOp())){
-	        				if (args.length == 1 || args.length == 2){
-	        					sendMessage(sender,plugin.colorizeText("/ticket send <Name> <Amount>",ChatColor.YELLOW) +" - Send ticket to semeone");
+	        				//We check if we have all the arguments
+	        				if (args.length == 1 || args.length == 2 || args.length == 3){
+	        					sendMessage(sender,plugin.colorizeText("/ticket send <Name> <Amount> <Business>",ChatColor.YELLOW) +" - Send ticket to semeone");
 	        					return handled;
 	        				}
+	        				//We do type check args[1] contains the receiver name args[2] Contains the amount of tickets args[3] contains the business name
 	        				if (!TTools.isInt(args[1])){
 	        					if (TTools.isInt(args[2])){
-	        						String sendername = ((Player)sender).getName();
-	        						String name = args[1];
-	                				try {
-	                					target = plugin.matchSinglePlayer(sender, name);
-	                					if (target.getName() != null){
-	                    					name = target.getName();
-	                    				}
-	                				}catch (CommandException error){
-	                					sendMessage(sender,plugin.colorizeText(error.getMessage(),ChatColor.RED));
-	                					return handled;
-	                				}
-	                				if (sendername == name){
-	                					sendMessage(sender,plugin.colorizeText("You can't send ticket(s) to yourself!",ChatColor.RED));
-	                					return handled;
-	                				}
-	                				ticketarg = Integer.parseInt(args[2]);
-	                				if (plugin.checkIfPlayerExists(sendername)){
-	                			    		currentticket = plugin.getPlayerTicket(sendername);
-	                						amount = currentticket - ticketarg;
-	                						if (amount < 0){
-	                							sendMessage(sender,plugin.colorizeText("You online have ",ChatColor.RED) + currentticket + plugin.colorizeText(" ticket(s)! You can't send ",ChatColor.RED) + ticketarg + plugin.colorizeText(" ticket(s)!",ChatColor.RED));
-	                							return handled;
-	                						}
-	                						if (plugin.givePlayerTicket(name,ticketarg)){
-	                							plugin.removePlayerTicket(sendername,ticketarg);
-	                							sendMessage(sender,plugin.colorizeText(args[2] +" ticket(s) has been given to "+ name,ChatColor.GREEN));
-	                        					if (target.getName() != null){
-	                        						sendMessage(target,plugin.colorizeText("You received "+ ticketarg +" ticket(s) from "+ ((Player)sender).getName() + ".",ChatColor.GREEN));
-	                        					}
-	                						}
-	                						
-	                						
-	                			    }else{
-	                			    	sendMessage(sender,plugin.colorizeText("You can't send ticket(s) because you don't have any!",ChatColor.RED));	
-	                				}
-	                				
-	        					}else{
+	        						if (!TTools.isInt(args[3])){
+	        							//We put it in friendly variables
+	        							String businessname = args[3];
+	        							String sendername = ((Player)sender).getName();
+		        						String name = args[1];
+		        						//We try to find the received online
+		                				try {
+		                					target = plugin.matchSinglePlayer(sender, name);
+		                					if (target.getName() != null){
+		                    					name = target.getName();
+		                    				}
+		                				}catch (CommandException error){
+		                					sendMessage(sender,plugin.colorizeText(error.getMessage(),ChatColor.RED));
+		                					return handled;
+		                				}
+		                				//We check if we don't try to send ticket to ourself
+		                				if (sendername == name){
+		                					sendMessage(sender,plugin.colorizeText("You can't send ticket(s) to yourself!",ChatColor.RED));
+		                					return handled;
+		                				}
+		                				//We parse the ticket amount in integer
+		                				ticketarg = Integer.parseInt(args[2]);
+		                				//We do the stuff
+		                				plugin.checkIfPlayerExists(sendername,sender);
+		                				plugin.removePlayerTicket(sendername,ticketarg,businessname,sender);
+		                				plugin.givePlayerTicket(name,ticketarg,businessname);
+		                				//Send the success message
+		                				sendMessage(sender,plugin.colorizeText(args[2] +" ticket(s) has been given to "+ name,ChatColor.GREEN));
+		                				if (target.getName() != null){
+		                        			sendMessage(target,plugin.colorizeText("You received "+ ticketarg +" ticket(s) from "+ ((Player)sender).getName() + ".",ChatColor.GREEN));
+		                        		}
+		                			
+	        						}else
+	        							sendMessage(sender,plugin.colorizeText("Integer received for the first parameter. Expecting string.",ChatColor.RED));
+	        					}else
 	                				sendMessage(sender,plugin.colorizeText("String received for the second parameter. Expecting integer.",ChatColor.RED));
-	                			}
-	        					
-	        				}else {
-	        					sendMessage(sender,plugin.colorizeText("Integer received for the first parameter. Expecting string.",ChatColor.RED));
-	        				}
-	        					
-	        			}else{
+	        				}else
+	        					sendMessage(sender,plugin.colorizeText("Integer received for the first parameter. Expecting string.",ChatColor.RED));			
+	        			}else
 	        				sendMessage(sender,plugin.colorizeText("Permission denied.",ChatColor.RED));
-	    				} 
-	        		}*/
+	        		}
 	        		else if(is(args[0],"give")){
 	        			handled = true;
 	        			//We check the guy permission
 	        			if (isPlayer(sender) && TPermissions.permission(plugin.getPlayer(sender), "ticket.give", plugin.getPlayer(sender).isOp())){
+	        				//We check if we have all the arguments
+	        				if (args.length == 1 || args.length == 2 || args.length == 3){
+	        					sendMessage(sender,plugin.colorizeText("/ticket give <Name> <Amount> <Business>",ChatColor.YELLOW) +" - Give ticket to semeone");
+	        					return handled;
+	        				}
 	            			//We check if we received a string for the first parameter (Player)
-	            			if (args[1] != null && !TTools.isInt(args[1])){
+	            			if (!TTools.isInt(args[1])){
 	            				//We check if we received a int for the second parameter (Amount)
-	            				if (args[2] != null && TTools.isInt(args[2])){
+	            				if (TTools.isInt(args[2])){
 	            					//We check if we received a string for the third parameter (Business)
-	            					if (args[3] != null && !TTools.isInt(args[1])){
+	            					if (!TTools.isInt(args[1])){
 	            						//We set friendly variables
 	            						String name = args[1];
 	                    				try {
@@ -234,8 +234,11 @@ public class TemplateCmd implements CommandExecutor {
 	        		else if(is(args[0],"take")){
 	        			handled = true;
 	        			if (isPlayer(sender) && TPermissions.permission(plugin.getPlayer(sender), "ticket.take", plugin.getPlayer(sender).isOp())){
-	            			//TODO: Add parameters check
-	        				
+	            			//We check if we have all the arguments
+	        				if (args.length == 1 || args.length == 2 || args.length == 3){
+	        					sendMessage(sender,plugin.colorizeText("/ticket take <Name> <Amount> <Business>",ChatColor.YELLOW) +" - Take ticket to semeone");
+	        					return handled;
+	        				}
 	            			//We check if we received a string for the first parameter (Player)
 	            			if (args[1] != null && !TTools.isInt(args[1])){
 	            				//We check if we received a int for the second parameter (Amount)
@@ -259,7 +262,7 @@ public class TemplateCmd implements CommandExecutor {
 	                    				String businessname = args[3];
 	                    				//We check if this business exists
 	                    					if (plugin.checkIfPlayerExists(name)){
-		                    					plugin.removePlayerTicket(name,ticketarg,businessname);		                    					
+		                    					plugin.removePlayerTicket(name,ticketarg,businessname,sender);		                    					
 		                    					sendMessage(sender,plugin.colorizeText(args[2] +" ticket(s) has been removed from "+ name,ChatColor.GREEN));
 			                					if (target.getName() != null){
 			                						sendMessage(target,plugin.colorizeText(ticketarg +" ticket(s) has been removed by "+ ((Player)sender).getName() + ".",ChatColor.RED));
