@@ -66,19 +66,56 @@ public class TDatabase {
         if (dataMode == SQLMode.MySQL){
         	tableQuery = "CREATE TABLE `players` ("
         						+ "`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,"
-        						+ "`name` VARCHAR( 30 ) NOT NULL ,"
-        						+ "`ticket` BIGINT NOT NULL DEFAULT '0'"
+        						+ "`name` VARCHAR( 30 ) NOT NULL"
         						+") ENGINE = MYISAM ;";
         }else {
         	tableQuery = "CREATE TABLE players ("
                     + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-                    + "name VARCHAR(30),"
-                    + "ticket BIGINT DEFAULT '0')";
+                    + "name VARCHAR(30))";
         }
         
         if(!dbm.tableExists("players") && dbm.createTable(tableQuery))
             TLogger.info("Table created. (players)");
-        
+        if (dataMode == SQLMode.MySQL){
+        	tableQuery = "CREATE TABLE `tickets` ("
+        						+ "`user_id` INT NOT NULL ,"
+        						+ "`tickets` BIGINT NOT NULL ,"
+        						+ "`business_id` INT NOT NULL"
+        						+") ENGINE = MYISAM ;";
+        }else {
+        	tableQuery = "CREATE TABLE tickets ("
+                    + "user_id INTEGER,"
+                    + "tickets BIGINT,"
+                    + "business_id BIGINT)";
+        }
+        if (!dbm.tableExists("tickets") && dbm.createTable(tableQuery)){
+        	TLogger.info("Table created. (tickets)");
+        }
+        if (dataMode == SQLMode.MySQL){
+        	tableQuery = "CREATE TABLE `logblock`.`business` ("
+						+"`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,"
+						+"`name` VARCHAR( 20 ) NOT NULL ,"
+						+"`lottery` INT NOT NULL ,"
+						+"`lotterychance` INT NOT NULL ,"
+						+"`lotteryitem` INT NOT NULL ,"
+						+"`lotterycost` INT NOT NULL ,"
+						+"`owner_id` INT NOT NULL"
+						+") ENGINE = MYISAM ;";
+        }else {
+        	tableQuery = "CREATE TABLE business ("
+						+"id  INTEGER,"
+						+"name  TEXT(20),"
+						+"lottery  INTEGER,"
+						+"lotterychance  INTEGER,"
+						+"lotteryitem  INTEGER,"
+						+"lotterycost  INTEGER,"
+						+"owner_id  INTEGER,"
+						+"PRIMARY KEY (id ASC)"
+						+");";
+        }
+        if (!dbm.tableExists("business") && dbm.createTable(tableQuery)){
+        	TLogger.info("Table created. (business)");
+        }
         // An example on how to get and set data in the database
         //   using the DataManager is in the TemplateCmd Class
     }

@@ -321,7 +321,7 @@ public class Tickets extends JavaPlugin {
     		int id = getPlayerId(name);
     		if (id < 0)
     			return null;
-    		ResultSet result = dbm.query("SELECT business.name, tickets.tickets FROM tickets LEFT JOIN business ON (tickets.business_id = business.id) WHERE user_id= '" + id + "'");
+    		ResultSet result = dbm.query("SELECT business.name, tickets.tickets, business.lottery FROM tickets LEFT JOIN business ON (tickets.business_id = business.id) WHERE user_id= '" + id + "'");
     			return result;
     	}else
     		return null;

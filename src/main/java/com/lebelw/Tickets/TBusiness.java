@@ -113,4 +113,20 @@ public class TBusiness {
 	    	return -1;
 		}
 	}
+	public static boolean isBusinessOwner(String name, String businessname){
+		
+		ResultSet result = Tickets.dbm.query("SELECT lotterycost FROM business WHERE name LIKE '%" + businessname + "%' AND owner='"+name+"'");
+    	try {
+			if (result != null  && result.next()){
+				if (result.isLast())
+					return true;
+				else
+					throw new CommandException("More than 1 business found! Please type more characters");
+			}else
+				throw new CommandException("No business found!");
+		} catch (SQLException e) {
+			TLogger.warning(e.getMessage());
+	    	return false;
+		}
+	}
 }

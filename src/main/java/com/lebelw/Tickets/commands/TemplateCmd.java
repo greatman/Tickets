@@ -402,6 +402,8 @@ public class TemplateCmd implements CommandExecutor {
         				}else
             				sendMessage(sender,plugin.colorizeText("Integer received for the first parameter. Expecting string.",ChatColor.RED));
         			}
+	        	}else{
+	        		sendMessage(sender,plugin.colorizeText("Type /business help for help.",ChatColor.YELLOW));
 	        	}
 	        	
 	        }
