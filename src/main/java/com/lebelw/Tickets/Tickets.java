@@ -298,6 +298,7 @@ public class Tickets extends JavaPlugin {
 				return true;
 			}else{
 				if (sender == null){
+					TLogger.info("Testing for listener" + listener);
 					if (listener == 0)
 						throw new CommandException("He does not have a ticket account! Please ask him to reconnect.");
 					else
@@ -314,12 +315,14 @@ public class Tickets extends JavaPlugin {
 		}
     }
     public boolean checkIfPlayerExistsListener(String name, CommandSender sender){
+    	TLogger.info("Good function");
     	return checkIfPlayerExists(name,sender,1);
     }
     public boolean checkIfPlayerExists(String name, CommandSender sender){
     	return checkIfPlayerExists(name,sender,0);
     }
     public boolean checkIfPlayerExists(String name) {
+    	TLogger.info("Name only one");
     	return checkIfPlayerExists(name,null,0);
     }
     /*
