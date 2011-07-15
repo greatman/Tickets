@@ -352,6 +352,10 @@ public class TemplateCmd implements CommandExecutor {
 	        	}
 	        // /business command
 	        }else if(is(label,"business")){
+	        	if (args == null || args.length == 0){
+	        		sendMessage(sender,plugin.colorizeText("Type /business help for help.",ChatColor.YELLOW));
+	        		return true;
+	        	}
 	        	if (is(args[0],"help")){
 	        		handled = true;
 	        		if (isPlayer(sender) && TPermissions.permission(plugin.getPlayer(sender), "ticket.business.add", plugin.getPlayer(sender).isOp())){
