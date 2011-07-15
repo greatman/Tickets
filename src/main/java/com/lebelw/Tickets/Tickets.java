@@ -366,8 +366,8 @@ public class Tickets extends JavaPlugin {
      * 
      * @param name    The full name of the player.
      */
-    public boolean createPlayerTicketAccount(String name){
-    	if (!checkIfPlayerExists(name)){
+    public boolean createPlayerTicketAccount(String name, int listener){
+    	if (!checkIfPlayerExists(name,null,listener)){
     		if(dbm.insert("INSERT INTO players(name) VALUES('" + name + "')")){
     			return true;
     		}else{
@@ -375,6 +375,9 @@ public class Tickets extends JavaPlugin {
     		}
     	}else
     		throw new CommandException("Account already exists!");
+    }
+    public boolean createPlayerTicketAccount(String name){
+    	return createPlayerTicketAccount(name,0);
     }
     public boolean removePlayerTicket(String name, Integer amount,String businessname,CommandSender sender){
     	int currentticket;
