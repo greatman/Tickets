@@ -401,11 +401,36 @@ public class TemplateCmd implements CommandExecutor {
         						
         				}else
             				sendMessage(sender,plugin.colorizeText("Integer received for the first parameter. Expecting string.",ChatColor.RED));
-        			}
-	        	}else{
-	        		sendMessage(sender,plugin.colorizeText("Type /business help for help.",ChatColor.YELLOW));
+        			}else
+        				sendMessage(sender,plugin.colorizeText("Permission denied.", ChatColor.RED));
 	        	}
-	        	
+        		else if(is(args[0],"delete")){
+        			handled = true;
+        			if (args.length == 1){
+    	        		sendMessage(sender,plugin.colorizeText("/business delete <Name>",ChatColor.YELLOW) + "- Delete a business");
+    					return handled;
+    	        	}
+    	        	//We check if we received text
+    	        	if(TTools.isInt(args[1])){
+    	        		sendMessage(sender,plugin.colorizeText("Integer received for the first parameter. Expecting string.",ChatColor.RED));
+    	        		return handled;
+    	        	}
+    	        	//We put it in a friendly name
+    	        	String businessname = args[1];
+        			if (isPlayer(sender) && TPermissions.permission(plugin.getPlayer(sender), "ticket.business.delete", plugin.getPlayer(sender).isOp())){
+        	        	//We try to delete the business
+        	        	TBusiness.deleteBusiness(businessname);
+        	        	sendMessage(sender,plugin.colorizeText("Business deleted!",ChatColor.GREEN));
+        			//If that user is not a admin we check if he is the owner
+        			}else{
+        				if (TBusiness.isBusinessOwner(((Player)sender).getName(),businessname)){
+        					//We try to delete the business
+            	        	TBusiness.deleteBusiness(businessname);
+            	        	sendMessage(sender,plugin.colorizeText("Business deleted!",ChatColor.GREEN));
+        				}
+        			}
+        		}else
+	        		sendMessage(sender,plugin.colorizeText("Type /business help for help.",ChatColor.YELLOW));
 	        }
         }catch(CommandException e){
         	sendMessage(sender,plugin.colorizeText(e.getMessage() + " Type /ticket help for help.",ChatColor.RED));

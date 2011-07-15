@@ -129,4 +129,26 @@ public class TBusiness {
 	    	return false;
 		}
 	}
+	public static boolean deleteBusiness(String businessname){
+		ResultSet result = Tickets.dbm.query("SELECT id FROM business WHERE name LIKE '%" + businessname + "%'");
+    	try {
+			if (result != null  && result.next()){
+				if (result.isLast()){
+					int businessid = result.getInt("id");
+					String query = "DELETE FROM tickets WHERE business_id=" + businessid;
+					if (Tickets.dbm.execute(query)){
+						return Tickets.dbm.execute("DELETE FROM business WHERE id=" + businessid);
+					}else
+						throw new CommandException("A error occured while deleting existing tickets.");
+				}
+					
+				else
+					throw new CommandException("More than 1 business found! Please type more characters");
+			}else
+				throw new CommandException("No business found!");
+		} catch (SQLException e) {
+			TLogger.warning(e.getMessage());
+	    	return false;
+		}
+	}
 }
