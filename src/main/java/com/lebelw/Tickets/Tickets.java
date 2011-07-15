@@ -290,15 +290,20 @@ public class Tickets extends JavaPlugin {
      * 
      * @param name    The full name of the player.
      */
-    public boolean checkIfPlayerExists(String name,CommandSender sender)
+    public boolean checkIfPlayerExists(String name,CommandSender sender,int Listener)
     {
     	ResultSet result = dbm.query("SELECT id FROM players WHERE name = '" + name + "'");
 		try {
 			if (result != null  && result.next()){
 				return true;
 			}else{
-				if (sender == null)
-					throw new CommandException("He does not have a ticket account! Please ask him to reconnect.");
+				if (sender == null){
+					if (Listener == 0)
+						throw new CommandException("He does not have a ticket account! Please ask him to reconnect.");
+					else
+						return false;
+				}
+					
 				else
 					throw new CommandException("You do not have a ticket account! Please reconnect.");
 			}
@@ -307,6 +312,9 @@ public class Tickets extends JavaPlugin {
 			TLogger.warning(e.getMessage());
 			return false;
 		}
+    }
+    public boolean checkIfPlayerExists(String name, CommandSender sender){
+    	return checkIfPlayerExists(name,sender,0);
     }
     public boolean checkIfPlayerExists(String name) {
     	return checkIfPlayerExists(name,null);
