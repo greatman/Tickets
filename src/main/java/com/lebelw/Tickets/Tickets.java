@@ -314,8 +314,11 @@ public class Tickets extends JavaPlugin {
 			return false;
 		}
     }
-    public boolean checkIfPlayerExists(String name, CommandSender sender){
+    public boolean checkIfPlayerExistsListener(String name, CommandSender sender){
     	TLogger.info("Good function");
+    	return checkIfPlayerExists(name,sender,0);
+    }
+    public boolean checkIfPlayerExists(String name, CommandSender sender){
     	return checkIfPlayerExists(name,sender,0);
     }
     public boolean checkIfPlayerExists(String name) {
