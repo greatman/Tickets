@@ -386,7 +386,7 @@ public class TemplateCmd implements CommandExecutor {
         						lotteryitem = Integer.parseInt(args[5]);
         				}
         				if (!TTools.isInt(args[1])){
-        					if (TTools.isInt(args[2])){
+        					if (!TTools.isInt(args[2])){
         						//set friendly variables
         						businessname = args[1];
         						businessowner = args[2];
@@ -402,7 +402,7 @@ public class TemplateCmd implements CommandExecutor {
 	        					TBusiness.addBusiness(businessname,businessowner,lottery,lotterychance,lotteryitem);
         						sendMessage(sender,plugin.colorizeText("Business "+ businessname + " added!",ChatColor.RED));
         					}else
-	            				sendMessage(sender,plugin.colorizeText("String received for the second parameter. Expecting integer.",ChatColor.RED));
+        						sendMessage(sender,plugin.colorizeText("Integer received for the second parameter. Expecting string.",ChatColor.RED));
         						
         				}else
             				sendMessage(sender,plugin.colorizeText("Integer received for the first parameter. Expecting string.",ChatColor.RED));
