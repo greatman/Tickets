@@ -317,7 +317,7 @@ public class Tickets extends JavaPlugin {
     	return checkIfPlayerExists(name,sender,0);
     }
     public boolean checkIfPlayerExists(String name) {
-    	return checkIfPlayerExists(name,null);
+    	return checkIfPlayerExists(name,null,0);
     }
     /*
      * Get the amount of tickets a player have
