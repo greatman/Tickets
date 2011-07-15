@@ -290,7 +290,7 @@ public class Tickets extends JavaPlugin {
      * 
      * @param name    The full name of the player.
      */
-    public boolean checkIfPlayerExists(String name,CommandSender sender,int Listener)
+    public boolean checkIfPlayerExists(String name,CommandSender sender,int listener)
     {
     	ResultSet result = dbm.query("SELECT id FROM players WHERE name = '" + name + "'");
 		try {
@@ -298,7 +298,8 @@ public class Tickets extends JavaPlugin {
 				return true;
 			}else{
 				if (sender == null){
-					if (Listener == 0)
+					TLogger.info("Testing for listener");
+					if (listener == 0)
 						throw new CommandException("He does not have a ticket account! Please ask him to reconnect.");
 					else
 						return false;
@@ -314,9 +315,11 @@ public class Tickets extends JavaPlugin {
 		}
     }
     public boolean checkIfPlayerExists(String name, CommandSender sender){
+    	TLogger.info("Good function");
     	return checkIfPlayerExists(name,sender,0);
     }
     public boolean checkIfPlayerExists(String name) {
+    	TLogger.info("Name only one");
     	return checkIfPlayerExists(name,null,0);
     }
     /*
