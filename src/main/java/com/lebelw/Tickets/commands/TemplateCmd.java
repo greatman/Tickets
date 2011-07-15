@@ -368,7 +368,7 @@ public class TemplateCmd implements CommandExecutor {
 	        		handled = true;
 	        		int lottery = 0,lotterychance = 0,lotteryitem = 0;
         			if (isPlayer(sender) && TPermissions.permission(plugin.getPlayer(sender), "ticket.business.add", plugin.getPlayer(sender).isOp())){
-        				if (args.length == 1 || args.length == 2 || args.length == 3){
+        				if (args.length == 1 || args.length == 2){
         					sendMessage(sender,plugin.colorizeText("/business add <Name> <Owner> (Lottery) (Lottery Chance) (Lottery Item)",ChatColor.YELLOW) + "- Create a business. (Optional)");
         					return handled;
         				}
