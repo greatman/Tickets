@@ -361,6 +361,7 @@ public class TemplateCmd implements CommandExecutor {
 	        		if (isPlayer(sender) && TPermissions.permission(plugin.getPlayer(sender), "ticket.business.add", plugin.getPlayer(sender).isOp())){
             			sendMessage(sender,plugin.colorizeText("/business add <Name> <Owner> (Lottery) (Lottery Chance) (Lottery Item)",ChatColor.YELLOW) + "- Create a business. (Optional)");
             		}
+	        			sendMessage(sender,plugin.colorizeText("/business delete <Name>",ChatColor.YELLOW) + "- Delete a business");
 	        	}
 	        	//Is the subcommand add?
 	        	if (is(args[0],"add")){
